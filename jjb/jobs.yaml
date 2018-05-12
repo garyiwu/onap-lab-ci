@@ -1,0 +1,9 @@
+---
+- project:
+    name: lab-ci
+    jobs:
+     - '{env}-oom-healthcheck'
+    env:
+     - 'windriver-SB00':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-00'
