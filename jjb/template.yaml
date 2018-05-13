@@ -12,6 +12,8 @@
           wipe-workspace: false
           skip-tag: true
           timeout: 30
+    triggers:
+      - timed: 'H/15 * * * *'
     builders:
       - shell: |
           #!/bin/bash -x
@@ -38,3 +40,27 @@
           fi
           wget --user=robot --password=robot -r -np -nH --cut-dirs=2 -R "index.html*" -P $WORKSPACE/archives/ http://$K8S_IP:30209/logs/$LOG_DIR/
           exit 0
+
+- job-template:
+    name: '{env}-oom-deploy'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git:
+          url: 'http://gerrit.onap.org/r/integration'
+          branches:
+            - '*/master'
+          wipe-workspace: false
+          skip-tag: true
+          timeout: 30
+    builders:
+      - shell: |
+          #!/bin/bash -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+
+          . $WORKSPACE/test/ete/labs/{lab-name}/{tenant-name}-openrc
+
+          cd $WORKSPACE/deployment/heat/onap-oom
+          $WORKSPACE/deployment/heat/onap-oom/scripts/deploy.sh ./env/{lab-name}/{tenant-name}.env

@@ -1,8 +1,9 @@
 ---
 - project:
-    name: lab-ci
+    name: lab-ci-oom
     jobs:
      - '{env}-oom-healthcheck'
+     - '{env}-oom-deploy'
     env:
      - 'windriver-SB00':
          lab-name: 'windriver'
