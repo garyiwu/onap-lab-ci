@@ -8,3 +8,12 @@
      - 'windriver-SB00':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-00'
+- project:
+    name: lab-ci-heat
+    jobs:
+     - '{env}-heat-healthcheck'
+     - '{env}-heat-deploy'
+    env:
+     - 'windriver-SB02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'

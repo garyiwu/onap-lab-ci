@@ -1,0 +1,73 @@
+---
+- job-template:
+    name: '{env}-heat-healthcheck'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git:
+          url: 'http://gerrit.onap.org/r/integration'
+          branches:
+            - '*/master'
+          wipe-workspace: false
+          skip-tag: true
+          timeout: 30
+    wrappers:
+      - timestamps
+    triggers:
+      - timed: 'H/15 * * * *'
+    builders:
+      - shell: |
+          #!/bin/bash
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+          . $WORKSPACE/test/ete/labs/{lab-name}/{tenant-name}-openrc
+          $WORKSPACE/test/ete/scripts/run-healthcheck.sh
+          exit 0
+    publishers:
+      - robot:
+          output-path: 'archives'
+          unstable-threshold: 75
+          pass-threshold: 100
+          only-critical: false
+
+- job-template:
+    name: '{env}-heat-deploy'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git:
+          url: 'http://gerrit.onap.org/r/integration'
+          branches:
+            - '*/master'
+          wipe-workspace: false
+          skip-tag: true
+          timeout: 30
+    wrappers:
+      - timestamps
+    builders:
+      - shell: |
+          #!/bin/bash -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+          . $WORKSPACE/test/ete/labs/{lab-name}/{tenant-name}-openrc
+          $WORKSPACE/test/ete/scripts/deploy-onap.sh {lab-name}
+          if [ $? -ne 0 ]; then
+            exit 1
+          fi
+
+          # retry every 15 minutes for up to 2 hours
+          n=0
+          until [ $n -ge 8 ]
+          do
+            sleep 15m
+            $WORKSPACE/test/ete/scripts/run-healthcheck.sh && break
+            n=$[$n+1]
+          done
+    publishers:
+      - robot:
+          output-path: 'archives'
+          unstable-threshold: 75
+          pass-threshold: 100
+          only-critical: false
