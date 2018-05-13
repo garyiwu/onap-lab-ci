@@ -12,6 +12,8 @@
           wipe-workspace: false
           skip-tag: true
           timeout: 30
+    wrappers:
+      - timestamps
     triggers:
       - timed: 'H/15 * * * *'
     builders:
@@ -40,6 +42,12 @@
           fi
           wget --user=robot --password=robot -r -np -nH --cut-dirs=2 -R "index.html*" -P $WORKSPACE/archives/ http://$K8S_IP:30209/logs/$LOG_DIR/
           exit 0
+    publishers:
+      - robot:
+          output-path: 'archives'
+          unstable-threshold: 75
+          pass-threshold: 100
+          only-critical: false
 
 - job-template:
     name: '{env}-oom-deploy'
@@ -54,6 +62,8 @@
           wipe-workspace: false
           skip-tag: true
           timeout: 30
+    wrappers:
+      - timestamps
     builders:
       - shell: |
           #!/bin/bash -x
@@ -64,3 +74,9 @@
 
           cd $WORKSPACE/deployment/heat/onap-oom
           $WORKSPACE/deployment/heat/onap-oom/scripts/deploy.sh ./env/{lab-name}/{tenant-name}.env
+    publishers:
+      - robot:
+          output-path: 'archives'
+          unstable-threshold: 75
+          pass-threshold: 100
+          only-critical: false
