@@ -8,6 +8,9 @@
      - 'windriver-SB00':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-00'
+     - 'windriver-SB04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
 - project:
     name: lab-ci-heat
     jobs:
@@ -17,3 +20,6 @@
      - 'windriver-SB02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
+     - 'windriver-SB07':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-07'
