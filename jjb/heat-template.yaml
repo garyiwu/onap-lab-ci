@@ -25,11 +25,7 @@
           $WORKSPACE/test/ete/scripts/run-healthcheck.sh
           exit 0
     publishers:
-      - robot:
-          output-path: 'archives'
-          unstable-threshold: 75
-          pass-threshold: 100
-          only-critical: false
+      - integration-robot
 
 - job-template:
     name: '{env}-heat-deploy'
@@ -66,8 +62,4 @@
             n=$[$n+1]
           done
     publishers:
-      - robot:
-          output-path: 'archives'
-          unstable-threshold: 75
-          pass-threshold: 100
-          only-critical: false
+      - integration-robot

@@ -1,0 +1,10 @@
+---
+- publisher:
+    name: integration-robot
+    publishers:
+      - robot:
+          output-path: 'archives'
+          other-files: ''
+          unstable-threshold: 75
+          pass-threshold: 100
+          only-critical: false
