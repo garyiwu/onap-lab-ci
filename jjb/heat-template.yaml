@@ -5,13 +5,7 @@
     lab-name: ''
     tenant-name: ''
     scm:
-      - git:
-          url: 'http://gerrit.onap.org/r/integration'
-          branches:
-            - '*/master'
-          wipe-workspace: false
-          skip-tag: true
-          timeout: 30
+      - integration-master
     wrappers:
       - timestamps
     triggers:
@@ -33,13 +27,7 @@
     lab-name: ''
     tenant-name: ''
     scm:
-      - git:
-          url: 'http://gerrit.onap.org/r/integration'
-          branches:
-            - '*/master'
-          wipe-workspace: false
-          skip-tag: true
-          timeout: 30
+      - integration-master
     wrappers:
       - timestamps
     builders:

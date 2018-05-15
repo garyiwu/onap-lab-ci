@@ -1,4 +1,16 @@
 ---
+
+- scm:
+    name: integration-master
+    scm:
+      - git:
+          url: 'http://gerrit.onap.org/r/integration'
+          branches:
+            - '*/master'
+          wipe-workspace: false
+          skip-tag: true
+          timeout: 30
+
 - publisher:
     name: integration-robot
     publishers:
