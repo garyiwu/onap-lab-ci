@@ -17,9 +17,6 @@
      - '{env}-heat-healthcheck'
      - '{env}-heat-deploy'
     env:
-     - 'windriver-SB01':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-01'
      - 'windriver-SB02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
