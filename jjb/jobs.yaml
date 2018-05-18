@@ -1,8 +1,26 @@
 ---
 - project:
-    name: lab-ci-oom
+    name: oom-tests
     jobs:
      - '{env}-oom-healthcheck'
+     - '{env}-oom-instantiate'
+    env:
+     - 'tlab-beijing':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-OOM-Test'
+     - 'windriver-beijing':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-Jenkins'
+     - 'windriver-SB00':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-00'
+     - 'windriver-SB04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
+
+- project:
+    name: oom-deploy
+    jobs:
      - '{env}-oom-deploy'
     env:
      - 'windriver-SB00':
@@ -11,10 +29,32 @@
      - 'windriver-SB04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
+
 - project:
-    name: lab-ci-heat
+    name: heat-tests
     jobs:
      - '{env}-heat-healthcheck'
+     - '{env}-heat-instantiate'
+    env:
+     - 'tlab-beijing':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-HEAT-Test'
+     - 'windriver-beijing':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-Stable'
+     - 'windriver-SB01':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-01'
+     - 'windriver-SB02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+     - 'windriver-SB07':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-07'
+
+- project:
+    name: heat-deploy
+    jobs:
      - '{env}-heat-deploy'
     env:
      - 'windriver-SB01':
