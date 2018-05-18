@@ -31,6 +31,10 @@
       - integration-master
     wrappers:
       - timestamps
+    triggers:
+      - reverse:
+          jobs:
+            - "{env}-oom-deploy"
     properties:
       - build-blocker:
           blocking-jobs:

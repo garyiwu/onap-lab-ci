@@ -40,6 +40,10 @@
       - integration-master
     wrappers:
       - timestamps
+    triggers:
+      - reverse:
+          jobs:
+            - "{env}-heat-deploy"
     properties:
       - build-blocker:
           blocking-jobs:
