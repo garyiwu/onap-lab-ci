@@ -10,6 +10,10 @@
       - timestamps
     triggers:
       - timed: 'H/15 * * * *'
+    properties:
+      - build-blocker:
+          blocking-jobs:
+            - "{env}-oom-deploy"
     builders:
       - run-oom-ete-tag:
           lab-name: '{lab-name}'
@@ -27,6 +31,11 @@
       - integration-master
     wrappers:
       - timestamps
+    properties:
+      - build-blocker:
+          blocking-jobs:
+            - "{env}-oom-deploy"
+            - "{env}-oom-healthcheck"
     builders:
       - shell: |
           #!/bin/bash

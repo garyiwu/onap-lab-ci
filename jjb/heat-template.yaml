@@ -10,6 +10,10 @@
       - timestamps
     triggers:
       - timed: 'H/15 * * * *'
+    properties:
+      - build-blocker:
+          blocking-jobs:
+            - "{env}-heat-deploy"
     builders:
       - shell: |
           #!/bin/bash
@@ -36,6 +40,11 @@
       - integration-master
     wrappers:
       - timestamps
+    properties:
+      - build-blocker:
+          blocking-jobs:
+            - "{env}-heat-deploy"
+            - "{env}-heat-healthcheck"
     builders:
       - shell: |
           #!/bin/bash
