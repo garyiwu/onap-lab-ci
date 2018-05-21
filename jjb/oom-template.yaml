@@ -31,6 +31,8 @@
       - integration-master
     wrappers:
       - timestamps
+    triggers:
+      - timed: 'H/10 * * * *'
     properties:
       - build-blocker:
           blocking-jobs:
@@ -62,7 +64,21 @@
           GREP_TO_KILL=$( {{ cat $JENKINS_HOME/onap-lab-ci/jobs/$JOB_NAME/kill-list.txt; awk '{{print $1}}' < $WORKSPACE/kill-history.txt; }} | sort | uniq -c | sort -n | head -1 | awk '{{print $2}}')
           POD_TO_KILL=$(echo "kubectl -n onap get pods | grep dev-$GREP_TO_KILL- | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
           echo "$GREP_TO_KILL $POD_TO_KILL $BUILD_NUMBER $(date -Is)" >> $WORKSPACE/kill-history.txt
-          # echo "kubectl -n onap delete pod | grep $TO_KILL | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su
+          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su
+          sleep 5m
+
+          ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap healthdist"'
+          retval=$?
+
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep healthdist | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          if [ "$LOG_DIR" == "" ]; then
+            exit 1
+          fi
+
+          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+
+          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
           exit 0
     publishers:
