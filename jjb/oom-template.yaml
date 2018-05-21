@@ -61,7 +61,7 @@
           touch $WORKSPACE/kill-history.txt
           GREP_TO_KILL=$( {{ cat $JENKINS_HOME/onap-lab-ci/jobs/$JOB_NAME/kill-list.txt; awk '{{print $1}}' < $WORKSPACE/kill-history.txt; }} | sort | uniq -c | sort -n | head -1 | awk '{{print "dev-"$2"-"}}')
           POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $GREP_TO_KILL | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
-          echo "$GREP_KILL $POD_TO_KILL $BUILD_NUMBER $(date -Is)" >> $WORKSPACE/kill-history.txt
+          echo "$GREP_TO_KILL $POD_TO_KILL $BUILD_NUMBER $(date -Is)" >> $WORKSPACE/kill-history.txt
           # echo "kubectl -n onap delete pod | grep $TO_KILL | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su
 
           exit 0
