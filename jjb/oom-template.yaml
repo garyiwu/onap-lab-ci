@@ -23,6 +23,52 @@
       - integration-robot
 
 - job-template:
+    name: '{env}-oom-healthdist-resilience'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - integration-master
+    wrappers:
+      - timestamps
+    properties:
+      - build-blocker:
+          blocking-jobs:
+            - "{env}-oom-deploy"
+            - "{env}-oom-healthcheck"
+    builders:
+      - shell: |
+          #!/bin/bash
+          set +x
+          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
+          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
+          source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
+
+          set -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+
+          RANCHER_IP=$(openstack stack output show onap-oom rancher_vm_ip -c output_value -f value)
+          K8S_IP=$(openstack stack output show onap-oom k8s_1_vm_ip -c output_value -f value)
+
+          ssh-keygen -R $RANCHER_IP
+
+          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
+          if [ "$ROBOT_POD" == "" ]; then
+            exit 1
+          fi
+
+          touch $WORKSPACE/kill-history.txt
+          GREP_TO_KILL=$( {{ cat $JENKINS_HOME/onap-lab-ci/jobs/$JOB_NAME/kill-list.txt; awk '{{print $1}}' < $WORKSPACE/kill-history.txt; }} | sort | uniq -c | sort -n | head -1 | awk '{{print $2}}')
+          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $GREP_TO_KILL | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
+          echo "$GREP_KILL $POD_TO_KILL $BUILD_NUMBER $(date -Is)" >> $WORKSPACE/kill-history.txt
+          # echo "kubectl -n onap delete pod | grep $TO_KILL | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su
+
+          exit 0
+    publishers:
+      - integration-robot
+
+- job-template:
     name: '{env}-oom-instantiate'
     project-type: freestyle
     lab-name: ''

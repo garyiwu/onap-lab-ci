@@ -1,5 +1,14 @@
 ---
 - project:
+    name: oom-healthdist-resilience
+    jobs:
+     - '{env}-oom-healthdist-resilience'
+    env:
+     - 'windriver-SB02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+
+- project:
     name: oom-tests
     jobs:
      - '{env}-oom-healthcheck'
