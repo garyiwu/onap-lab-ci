@@ -44,6 +44,8 @@
       - reverse:
           jobs:
             - "{env}-heat-deploy"
+          results:
+            - unstable
     properties:
       - build-blocker:
           blocking-jobs:

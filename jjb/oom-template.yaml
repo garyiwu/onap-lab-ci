@@ -97,6 +97,8 @@
       - reverse:
           jobs:
             - "{env}-oom-deploy"
+          results:
+            - unstable
     properties:
       - build-blocker:
           blocking-jobs:
