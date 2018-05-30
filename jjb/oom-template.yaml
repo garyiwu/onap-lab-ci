@@ -32,7 +32,7 @@
     wrappers:
       - timestamps
     triggers:
-      - timed: 'H/10 * * * *'
+      - timed: 'H/20 * * * *'
     properties:
       - build-blocker:
           blocking-jobs:
@@ -65,7 +65,7 @@
           POD_TO_KILL=$(echo "kubectl -n onap get pods | grep dev-$GREP_TO_KILL- | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
           echo "$GREP_TO_KILL $POD_TO_KILL $BUILD_NUMBER $(date -Is)" >> $WORKSPACE/kill-history.txt
           echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su
-          sleep 5m
+          sleep 15m
 
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap healthdist"'
           retval=$?
