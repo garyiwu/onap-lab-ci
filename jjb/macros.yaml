@@ -11,6 +11,17 @@
           skip-tag: true
           timeout: 30
 
+- scm:
+    name: integration-beijing
+    scm:
+      - git:
+          url: 'http://gerrit.onap.org/r/integration'
+          branches:
+            - '*/beijing'
+          wipe-workspace: false
+          skip-tag: true
+          timeout: 30
+
 - publisher:
     name: integration-robot
     publishers:

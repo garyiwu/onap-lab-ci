@@ -5,7 +5,7 @@
     lab-name: ''
     tenant-name: ''
     scm:
-      - integration-master
+      - integration-beijing
     wrappers:
       - timestamps
     triggers:
@@ -28,7 +28,7 @@
     lab-name: ''
     tenant-name: ''
     scm:
-      - integration-master
+      - integration-beijing
     wrappers:
       - timestamps
     triggers:
@@ -90,7 +90,7 @@
     lab-name: ''
     tenant-name: ''
     scm:
-      - integration-master
+      - integration-beijing
     wrappers:
       - timestamps
     triggers:
@@ -154,7 +154,7 @@
     lab-name: ''
     tenant-name: ''
     scm:
-      - integration-master
+      - integration-beijing
     wrappers:
       - timestamps
     builders:
