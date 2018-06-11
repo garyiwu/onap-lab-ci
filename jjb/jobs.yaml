@@ -1,9 +1,3 @@
----
-- project:
-    name: oom-healthdist-resilience
-    jobs:
-     - '{env}-oom-healthdist-resilience'
-    env:
 
 - project:
     name: oom-tests
