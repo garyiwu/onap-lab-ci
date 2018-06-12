@@ -97,7 +97,7 @@
     wrappers:
       - timestamps
     triggers:
-      - timed: '0,30 * * * *'
+      - timed: '0 * * * *'
     properties:
       - build-blocker:
           blocking-jobs:
