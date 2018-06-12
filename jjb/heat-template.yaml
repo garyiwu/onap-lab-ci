@@ -97,10 +97,7 @@
     wrappers:
       - timestamps
     triggers:
-      - reverse:
-          jobs:
-            - "{env}-heat-deploy"
-          result: 'unstable'
+      - timed: '0,30 * * * *'
     properties:
       - build-blocker:
           blocking-jobs:
