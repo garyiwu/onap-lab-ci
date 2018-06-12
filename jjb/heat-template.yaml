@@ -88,6 +88,56 @@
       - integration-robot
 
 - job-template:
+    name: '{env}-heat-stability72hr'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - integration-beijing
+    wrappers:
+      - timestamps
+    triggers:
+      - reverse:
+          jobs:
+            - "{env}-heat-deploy"
+          result: 'unstable'
+    properties:
+      - build-blocker:
+          blocking-jobs:
+            - "{env}-heat-deploy"
+            - "{env}-heat-healthcheck"
+    builders:
+      - shell: |
+          #!/bin/bash
+          set +x
+          . $WORKSPACE/test/ete/labs/{lab-name}/{tenant-name}-openrc
+          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
+          source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
+
+          set -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+
+          cd $WORKSPACE/test/ete/scripts
+          ROBOT_IP=$(./get-floating-ip.sh onap-robot)
+          echo "ROBOT_IP=$ROBOT_IP"
+
+          if [ "" == "$ROBOT_IP" ]; then
+            exit 1
+          fi
+          SSH_KEY=~/.ssh/onap_key
+          ssh-keygen -R $ROBOT_IP
+
+          ssh -o StrictHostKeychecking=no -i $SSH_KEY root@$ROBOT_IP "/opt/ete.sh stability72hr"
+
+          LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep instantiate | head -1")
+          echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
+          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/
+          exit 0
+    publishers:
+      - integration-robot
+
+- job-template:
     name: '{env}-heat-deploy'
     project-type: freestyle
     lab-name: ''

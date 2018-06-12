@@ -4,6 +4,7 @@
     jobs:
      - '{env}-oom-healthcheck'
      - '{env}-oom-instantiate'
+     - '{env}-oom-stability72hr'
     env:
      - 'tlab-beijing':
          lab-name: 'tlab'
@@ -35,6 +36,7 @@
     jobs:
      - '{env}-heat-healthcheck'
      - '{env}-heat-instantiate'
+     - '{env}-heat-stability72hr'
     env:
      - 'tlab-beijing':
          lab-name: 'tlab'
