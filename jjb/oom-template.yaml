@@ -164,6 +164,7 @@
           blocking-jobs:
             - "{env}-oom-deploy"
             - "{env}-oom-healthcheck"
+            - "{env}-oom-instantiate"
     builders:
       - shell: |
           #!/bin/bash

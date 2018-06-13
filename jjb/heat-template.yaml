@@ -103,6 +103,7 @@
           blocking-jobs:
             - "{env}-heat-deploy"
             - "{env}-heat-healthcheck"
+            - "{env}-heat-instantiate"
     builders:
       - shell: |
           #!/bin/bash
