@@ -190,7 +190,7 @@
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap stability72hr"'
           retval=$?
 
-          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep instantiate | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep stability72hr | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
           if [ "$LOG_DIR" == "" ]; then
             exit 1
           fi
