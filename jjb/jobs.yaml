@@ -49,7 +49,7 @@
      - '{env}-heat-instantiate'
      - '{env}-heat-stability72hr'
     env:
-     - 'tlab':
+     - 'tlab-casablanca':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
          branch: 'master'
