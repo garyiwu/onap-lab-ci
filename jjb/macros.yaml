@@ -5,7 +5,7 @@
       - git:
           url: 'http://gerrit.onap.org/r/integration'
           branches:
-            - '*/{branch}'
+            - 'origin/{branch}'
           wipe-workspace: false
           skip-tag: true
           timeout: 30

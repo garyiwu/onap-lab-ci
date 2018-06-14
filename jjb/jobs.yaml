@@ -6,6 +6,10 @@
      - '{env}-oom-instantiate'
      - '{env}-oom-stability72hr'
     env:
+     - 'tlab-casablanca':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-OOM-Test'
+         branch: 'master'
      - 'windriver-beijing':
          lab-name: 'windriver'
          tenant-name: 'Integration-Jenkins'
@@ -45,6 +49,10 @@
      - '{env}-heat-instantiate'
      - '{env}-heat-stability72hr'
     env:
+     - 'tlab':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-HEAT-Test'
+         branch: 'master'
      - 'windriver-beijing':
          lab-name: 'windriver'
          tenant-name: 'Integration-Stable'
