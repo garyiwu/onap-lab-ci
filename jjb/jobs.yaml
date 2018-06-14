@@ -76,7 +76,7 @@
      - '{env}-heat-deploy'
     env:
      - 'tlab':
-         lab-name: 'tlab'
+         lab-name: 'tlab-casablanca'
          tenant-name: 'ETE-HEAT-Test'
          branch: 'master'
      - 'windriver-SB01':
