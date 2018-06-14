@@ -230,6 +230,32 @@
     publishers:
       - integration-robot
 
+- job-template:
+    name: '{env}-casablanca-oom-deploy'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - integration-master
+    wrappers:
+      - timestamps
+    builders:
+      - shell: |
+          #!/bin/bash
+          set +x
+          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
+          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
+          source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
+
+          set -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+
+          cd $WORKSPACE/deployment/heat/onap-oom
+          $WORKSPACE/deployment/heat/onap-oom/scripts/deploy.sh ./env/{lab-name}/{tenant-name}.env
+    publishers:
+      - integration-robot
+
 - builder:
     name: run-oom-ete-tag
     builders:

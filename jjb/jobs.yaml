@@ -6,9 +6,6 @@
      - '{env}-oom-instantiate'
      - '{env}-oom-stability72hr'
     env:
-     - 'tlab-beijing':
-         lab-name: 'tlab'
-         tenant-name: 'ETE-OOM-Test'
      - 'windriver-beijing':
          lab-name: 'windriver'
          tenant-name: 'Integration-Jenkins'
@@ -32,15 +29,21 @@
          tenant-name: 'Integration-SB-04'
 
 - project:
+    name: casablanca-oom-deploy
+    jobs:
+     - '{env}-casablanca-oom-deploy'
+    env:
+     - 'tlab':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-OOM-Test'
+
+- project:
     name: heat-tests
     jobs:
      - '{env}-heat-healthcheck'
      - '{env}-heat-instantiate'
      - '{env}-heat-stability72hr'
     env:
-     - 'tlab-beijing':
-         lab-name: 'tlab'
-         tenant-name: 'ETE-HEAT-Test'
      - 'windriver-beijing':
          lab-name: 'windriver'
          tenant-name: 'Integration-Stable'
@@ -68,3 +71,12 @@
      - 'windriver-SB07':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-07'
+
+- project:
+    name: casablanca-heat-deploy
+    jobs:
+     - '{env}-casablanca-heat-deploy'
+    env:
+     - 'tlab':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-HEAT-Test'

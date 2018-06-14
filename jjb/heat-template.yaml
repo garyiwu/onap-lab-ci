@@ -168,3 +168,37 @@
           done
     publishers:
       - integration-robot
+
+- job-template:
+    name: '{env}-casablanca-heat-deploy'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - integration-master
+    wrappers:
+      - timestamps
+    builders:
+      - shell: |
+          #!/bin/bash
+          set +x
+          . $WORKSPACE/test/ete/labs/{lab-name}/{tenant-name}-openrc
+          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
+          source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
+
+          set -x
+          $WORKSPACE/test/ete/scripts/deploy-onap.sh {lab-name}
+          if [ $? -ne 0 ]; then
+            exit 1
+          fi
+
+          # retry every 15 minutes for up to 2 hours
+          n=0
+          until [ $n -ge 8 ]
+          do
+            sleep 15m
+            $WORKSPACE/test/ete/scripts/run-healthcheck.sh && break
+            n=$[$n+1]
+          done
+    publishers:
+      - integration-robot
