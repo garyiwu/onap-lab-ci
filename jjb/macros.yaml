@@ -1,26 +1,15 @@
 ---
-
 - scm:
-    name: integration-master
+    name: git-integration
     scm:
       - git:
           url: 'http://gerrit.onap.org/r/integration'
           branches:
-            - '*/master'
+            - '*/{branch}'
           wipe-workspace: false
           skip-tag: true
           timeout: 30
 
-- scm:
-    name: integration-beijing
-    scm:
-      - git:
-          url: 'http://gerrit.onap.org/r/integration'
-          branches:
-            - '*/beijing'
-          wipe-workspace: false
-          skip-tag: true
-          timeout: 30
 
 - publisher:
     name: integration-robot

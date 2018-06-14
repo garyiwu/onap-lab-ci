@@ -9,33 +9,34 @@
      - 'windriver-beijing':
          lab-name: 'windriver'
          tenant-name: 'Integration-Jenkins'
+         branch: 'beijing'
      - 'windriver-SB00':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-00'
+         branch: 'beijing'
      - 'windriver-SB04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
+         branch: 'beijing'
 
 - project:
     name: oom-deploy
     jobs:
      - '{env}-oom-deploy'
     env:
+    env:
+     - 'tlab-casablanca':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-OOM-Test'
+         branch: 'master'
      - 'windriver-SB00':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-00'
+         branch: 'beijing'
      - 'windriver-SB04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
-
-- project:
-    name: casablanca-oom-deploy
-    jobs:
-     - '{env}-casablanca-oom-deploy'
-    env:
-     - 'tlab':
-         lab-name: 'tlab'
-         tenant-name: 'ETE-OOM-Test'
+         branch: 'beijing'
 
 - project:
     name: heat-tests
@@ -47,36 +48,38 @@
      - 'windriver-beijing':
          lab-name: 'windriver'
          tenant-name: 'Integration-Stable'
+         branch: 'beijing'
      - 'windriver-SB01':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
+         branch: 'beijing'
      - 'windriver-SB02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
+         branch: 'beijing'
      - 'windriver-SB07':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-07'
+         branch: 'beijing'
 
 - project:
     name: heat-deploy
     jobs:
      - '{env}-heat-deploy'
     env:
-     - 'windriver-SB01':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-01'
-     - 'windriver-SB02':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
-     - 'windriver-SB07':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-07'
-
-- project:
-    name: casablanca-heat-deploy
-    jobs:
-     - '{env}-casablanca-heat-deploy'
-    env:
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
+         branch: 'master'
+     - 'windriver-SB01':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-01'
+         branch: 'beijing'
+     - 'windriver-SB02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+         branch: 'beijing'
+     - 'windriver-SB07':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-07'
+         branch: 'beijing'
