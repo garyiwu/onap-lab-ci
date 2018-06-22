@@ -1,7 +1,7 @@
 #cloud-config
 # vim: syntax=yaml
 write_files:
-- path: /opt/entrypoint.sh
+- path: /opt/jenkins_vm_entrypoint.sh
   permissions: '0755'
   content: |
     #!/bin/bash -x
@@ -9,17 +9,6 @@ write_files:
     printenv
 
     echo `hostname -I` `hostname` >> /etc/hosts
-
-    #!/bin/bash -x
-    #
-    # Copyright 2017 Huawei Technologies Co., Ltd.
-    #
-    # Licensed under the Apache License, Version 2.0 (the "License");
-    # you may not use this file except in compliance with the License.
-    # You may obtain a copy of the License at
-    #
-    #     http://www.apache.org/licenses/LICENSE-2.0
-    #
 
     function restart_jenkins() {
       sudo systemctl restart jenkins
@@ -33,6 +22,13 @@ write_files:
       sleep 1
     }
 
+    cp ~ubuntu/.ssh/authorized_keys /root/.ssh
+
+    cat > /etc/apt/apt.conf.d/90curtin-aptproxy<<EOF
+    Acquire::http::Proxy "http://10.145.122.117:8000/";
+    EOF
+
+    apt-get update
 
     cat >> /etc/inputrc <<EOF
     set show-all-if-ambiguous on
@@ -42,11 +38,10 @@ write_files:
     EOF
 
 
-    apt-get update
     apt-get -y install git
     git config --global user.email "jenkins@localhost"
     git config --global user.name "jenkins"
-    apt-get -y install curl openjdk-8-jre-headless unzip
+    apt-get -y install curl openjdk-8-jre-headless unzip python3-openstackclient python3-heatclient python3-jenkins-job-builder jq openvpn
 
     # install Jenkins
     wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
@@ -54,6 +49,9 @@ write_files:
     apt-get update
     apt-get -y install jenkins
 
+    mkdir -p ~jenkins/.ssh
+    cp ~ubuntu/.ssh/authorized_keys ~jenkins/.ssh
+    chown -R jenkins:jenkins ~jenkins/.ssh
 
     su -l jenkins -c "/opt/jenkins-init-1.sh"
 
@@ -98,15 +96,18 @@ write_files:
     cd ~jenkins
     ln -s /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar
 
-    # Get the update center ourself
-    curl -L http://updates.jenkins-ci.org/update-center.json | sed '1d;$d' | curl -X POST -H 'Accept: application/json' -d @- http://localhost:8080/updateCenter/byId/default/postBack
-
     java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin git
     java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin ws-cleanup
     java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin envinject
+    java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin gerrit-trigger
+    java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin robot
 
     git add -A
     git commit -m 'Install initial plugins' > /dev/null
+
+    git clone https://github.com/garyiwu/onap-lab-ci.git
+    cd onap-lab-ci
+    jenkins-jobs update -r jjb
 
 - path: /opt/jenkins/jenkins.install.InstallUtil.lastExecVersion
   content: |
@@ -153,4 +154,4 @@ write_files:
     </user>
 
 runcmd:
-- /opt/entrypoint.sh
+- /opt/jenkins_vm_entrypoint.sh
