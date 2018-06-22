@@ -5,7 +5,7 @@ resources:
     type: OS::Nova::Server
     properties:
       image: bionic
-      flavor: m1.small
+      flavor: m1.medium
       key_name: mykey
       networks:
         - network: c5ef4668-8a11-441d-8ce8-4a211a94885f
