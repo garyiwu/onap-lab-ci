@@ -102,6 +102,7 @@ write_files:
     java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin gerrit-trigger
     java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin robot
     java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin postbuildscript
+    java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin timestamper
 
     git add -A
     git commit -m 'Install initial plugins' > /dev/null
