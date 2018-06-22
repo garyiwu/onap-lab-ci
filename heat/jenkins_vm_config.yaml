@@ -1,0 +1,156 @@
+#cloud-config
+# vim: syntax=yaml
+write_files:
+- path: /opt/entrypoint.sh
+  permissions: '0755'
+  content: |
+    #!/bin/bash -x
+
+    printenv
+
+    echo `hostname -I` `hostname` >> /etc/hosts
+
+    #!/bin/bash -x
+    #
+    # Copyright 2017 Huawei Technologies Co., Ltd.
+    #
+    # Licensed under the Apache License, Version 2.0 (the "License");
+    # you may not use this file except in compliance with the License.
+    # You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+
+    function restart_jenkins() {
+      sudo systemctl restart jenkins
+      sleep 1
+      echo -n "Restarting jenkins"
+      until $(curl --output /dev/null --silent --head --fail http://localhost:8080/login); do
+        printf '.'
+        sleep 3
+      done
+      echo
+      sleep 1
+    }
+
+
+    cat >> /etc/inputrc <<EOF
+    set show-all-if-ambiguous on
+    set show-all-if-unmodified on
+    set match-hidden-files off
+    set mark-symlinked-directories on
+    EOF
+
+
+    apt-get update
+    apt-get -y install git
+    git config --global user.email "jenkins@localhost"
+    git config --global user.name "jenkins"
+    apt-get -y install curl openjdk-8-jre-headless unzip
+
+    # install Jenkins
+    wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+    sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+    apt-get update
+    apt-get -y install jenkins
+
+
+    su -l jenkins -c "/opt/jenkins-init-1.sh"
+
+    restart_jenkins
+
+    su -l jenkins -c "/opt/jenkins-init-2.sh"
+
+    restart_jenkins
+
+- path: /opt/jenkins-init-1.sh
+  permissions: '0755'
+  content: |
+    #!/bin/bash -x
+
+    git config --global user.email "jenkins@localhost"
+    git config --global user.name "jenkins"
+
+    cd ~jenkins
+
+    cp /etc/skel/.profile .
+    cat > .bashrc <<EOF
+    alias ls='ls --color -F'
+    EOF
+
+    git init
+
+    git add -A
+    git commit -m 'Initial installation config' > /dev/null
+
+    rm -f secrets/initialAdminPassword
+    rm -rf users/admin
+    rsync -avP /opt/jenkins/ .
+
+    git add -A
+    git commit -m 'Set up jenkins user' > /dev/null
+
+- path: /opt/jenkins-init-2.sh
+  permissions: '0755'
+  content: |
+    #!/bin/bash -x
+
+    cd ~jenkins
+    ln -s /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar
+
+    # Get the update center ourself
+    curl -L http://updates.jenkins-ci.org/update-center.json | sed '1d;$d' | curl -X POST -H 'Accept: application/json' -d @- http://localhost:8080/updateCenter/byId/default/postBack
+
+    java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin git
+    java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin ws-cleanup
+    java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin envinject
+
+    git add -A
+    git commit -m 'Install initial plugins' > /dev/null
+
+- path: /opt/jenkins/jenkins.install.InstallUtil.lastExecVersion
+  content: |
+    2.46.3
+- path: /opt/jenkins/users/jenkins/config.xml
+  content: |
+    <?xml version='1.0' encoding='UTF-8'?>
+    <user>
+      <fullName>jenkins</fullName>
+      <properties>
+        <jenkins.security.ApiTokenProperty>
+          <apiToken>{AQAAABAAAAAwQAGpldGajxw//dhxd53gZGv4w0JnZYDETTLBQdpotQXt02s0lq13YrhyaytbLFMflb98hzWY9YBlDIThZt7u+Q==}</apiToken>
+        </jenkins.security.ApiTokenProperty>
+        <com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty plugin="credentials@2.1.13">
+          <domainCredentialsMap class="hudson.util.CopyOnWriteMap$Hash"/>
+        </com.cloudbees.plugins.credentials.UserCredentialsProvider_-UserCredentialsProperty>
+        <hudson.model.MyViewsProperty>
+          <views>
+            <hudson.model.AllView>
+              <owner class="hudson.model.MyViewsProperty" reference="../../.."/>
+              <name>all</name>
+              <filterExecutors>false</filterExecutors>
+              <filterQueue>false</filterQueue>
+              <properties class="hudson.model.View$PropertyList"/>
+            </hudson.model.AllView>
+          </views>
+        </hudson.model.MyViewsProperty>
+        <org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty plugin="display-url-api@2.0">
+          <providerId>default</providerId>
+        </org.jenkinsci.plugins.displayurlapi.user.PreferredProviderUserProperty>
+        <hudson.model.PaneStatusProperties>
+          <collapsed/>
+        </hudson.model.PaneStatusProperties>
+        <hudson.search.UserSearchProperty>
+          <insensitiveSearch>false</insensitiveSearch>
+        </hudson.search.UserSearchProperty>
+        <hudson.security.HudsonPrivateSecurityRealm_-Details>
+          <passwordHash>#jbcrypt:$2a$10$Esc9z/mnK/CQ8crgFbE3/eP1EI6pvzIHRBe3SSik7rrNt.DDftON2</passwordHash>
+        </hudson.security.HudsonPrivateSecurityRealm_-Details>
+        <hudson.tasks.Mailer_-UserProperty plugin="mailer@1.20">
+          <emailAddress>jenkins@localhost</emailAddress>
+        </hudson.tasks.Mailer_-UserProperty>
+      </properties>
+    </user>
+
+runcmd:
+- /opt/entrypoint.sh

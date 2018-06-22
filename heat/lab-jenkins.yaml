@@ -1,0 +1,22 @@
+heat_template_version: 2015-10-15
+
+resources:
+  server:
+    type: OS::Nova::Server
+    properties:
+      image: bionic
+      flavor: m1.small
+      key_name: mykey
+      networks:
+        - network: c5ef4668-8a11-441d-8ce8-4a211a94885f
+      user_data_format: RAW
+      user_data:
+        get_file: jenkins_vm_config.yaml
+
+outputs:
+  instance_name:
+    description: Name of the instance.
+    value: { get_attr: [ server, name ] }
+  instance_ip:
+    description: IP address of the instance.
+    value: { get_attr: [ server, first_address ] }
