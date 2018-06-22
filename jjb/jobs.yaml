@@ -43,6 +43,16 @@
          branch: 'beijing'
 
 - project:
+    name: oom-staging-verify
+    jobs:
+     - '{env}-oom-staging-verify'
+    env:
+     - 'windriver-casablanca':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-Jenkins'
+         branch: 'master'
+
+- project:
     name: heat-tests
     jobs:
      - '{env}-heat-healthcheck'

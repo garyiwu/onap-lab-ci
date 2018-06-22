@@ -41,6 +41,7 @@ write_files:
     apt-get -y install git
     git config --global user.email "jenkins@localhost"
     git config --global user.name "jenkins"
+    apt-get -y install etckeeper
     apt-get -y install curl openjdk-8-jre unzip python3-openstackclient python3-heatclient python3-jenkins-job-builder jq openvpn
 
     # install Jenkins
