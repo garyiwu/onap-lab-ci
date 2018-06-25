@@ -1,6 +1,16 @@
 #cloud-config
 # vim: syntax=yaml
 write_files:
+- path: /opt/format-disks
+  permissions: '0700'
+  content: |
+    #!/bin/bash
+    voldata_id="%voldata_id%"
+    voldata_dev="/dev/disk/by-id/virtio-$(echo ${voldata_id} | cut -c -20)"
+    mkfs.ext4 ${voldata_dev}
+    mkdir -pv /var/lib/jenkins
+    echo "${voldata_dev} /var/lib/jenkins ext4 defaults 1 2" >> /etc/fstab
+    mount /var/lib/jenkins
 - path: /opt/jenkins_vm_entrypoint.sh
   permissions: '0755'
   content: |
@@ -37,7 +47,7 @@ write_files:
     set mark-symlinked-directories on
     EOF
 
-
+    export HOME=/root
     apt-get -y install git
     git config --global user.email "jenkins@localhost"
     git config --global user.name "jenkins"
@@ -157,4 +167,5 @@ write_files:
     </user>
 
 runcmd:
+- /opt/format-disks
 - /opt/jenkins_vm_entrypoint.sh
