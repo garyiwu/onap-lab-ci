@@ -107,6 +107,7 @@ write_files:
     cd ~jenkins
     ln -s /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar
 
+    sleep 20
     java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin git
     java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin ws-cleanup
     java -jar jenkins-cli.jar -s http://localhost:8080/ -auth jenkins:jenkins install-plugin envinject
