@@ -10,18 +10,10 @@
          lab-name: 'tlab'
          tenant-name: 'ETE-OOM-Test'
          branch: 'master'
-     - 'windriver-beijing':
+     - 'windriver-casablanca':
          lab-name: 'windriver'
          tenant-name: 'Integration-Jenkins'
-         branch: 'beijing'
-     - 'windriver-SB00':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-00'
-         branch: 'beijing'
-     - 'windriver-SB04':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-04'
-         branch: 'beijing'
+         branch: 'master'
 
 - project:
     name: oom-deploy
@@ -33,14 +25,10 @@
          lab-name: 'tlab'
          tenant-name: 'ETE-OOM-Test'
          branch: 'master'
-     - 'windriver-SB00':
+     - 'windriver-casablanca':
          lab-name: 'windriver'
-         tenant-name: 'Integration-SB-00'
-         branch: 'beijing'
-     - 'windriver-SB04':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-04'
-         branch: 'beijing'
+         tenant-name: 'Integration-Jenkins'
+         branch: 'master'
 
 - project:
     name: oom-verify
@@ -63,22 +51,10 @@
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
          branch: 'master'
-     - 'windriver-beijing':
+     - 'windriver-casablanca':
          lab-name: 'windriver'
          tenant-name: 'Integration-Stable'
-         branch: 'beijing'
-     - 'windriver-SB01':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-01'
-         branch: 'beijing'
-     - 'windriver-SB02':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
-         branch: 'beijing'
-     - 'windriver-SB07':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-07'
-         branch: 'beijing'
+         branch: 'master'
 
 - project:
     name: heat-deploy
@@ -89,15 +65,7 @@
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
          branch: 'master'
-     - 'windriver-SB01':
+     - 'windriver-casablanca':
          lab-name: 'windriver'
-         tenant-name: 'Integration-SB-01'
-         branch: 'beijing'
-     - 'windriver-SB02':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
-         branch: 'beijing'
-     - 'windriver-SB07':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-07'
-         branch: 'beijing'
+         tenant-name: 'Integration-Stable'
+         branch: 'master'
