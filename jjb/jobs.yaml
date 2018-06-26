@@ -4,7 +4,7 @@
      - '{env}-oom-deploy'
      - '{env}-oom-healthcheck'
      - '{env}-oom-instantiate'
-     - '{env}-oom-stability72hr'
+#     - '{env}-oom-stability72hr'
     env:
      - 'tlab':
          lab-name: 'tlab'
@@ -31,7 +31,7 @@
      - '{env}-heat-deploy'
      - '{env}-heat-healthcheck'
      - '{env}-heat-instantiate'
-     - '{env}-heat-stability72hr'
+#     - '{env}-heat-stability72hr'
     env:
      - 'tlab':
          lab-name: 'tlab'
