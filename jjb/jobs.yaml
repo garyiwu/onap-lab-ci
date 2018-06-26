@@ -43,9 +43,9 @@
          branch: 'beijing'
 
 - project:
-    name: oom-staging-verify
+    name: oom-verify
     jobs:
-     - '{env}-oom-staging-verify'
+     - '{env}-oom-verify'
     env:
      - 'windriver-casablanca':
          lab-name: 'windriver'
