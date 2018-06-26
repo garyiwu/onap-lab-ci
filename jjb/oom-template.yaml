@@ -285,7 +285,7 @@
       - gerrit-trigger-patch-submitted:
           project: 'integration'
           branch: '{branch}'
-          files: '**'
+          files: 'version-manifest/src/main/resources/docker-manifest-staging.csv'
     wrappers:
       - timestamps
     builders:
