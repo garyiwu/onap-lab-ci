@@ -1,31 +1,16 @@
-
 - project:
     name: oom-tests
     jobs:
+     - '{env}-oom-deploy'
      - '{env}-oom-healthcheck'
      - '{env}-oom-instantiate'
      - '{env}-oom-stability72hr'
     env:
-     - 'tlab-casablanca':
+     - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-OOM-Test'
          branch: 'master'
-     - 'windriver-casablanca':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-Jenkins'
-         branch: 'master'
-
-- project:
-    name: oom-deploy
-    jobs:
-     - '{env}-oom-deploy'
-    env:
-    env:
-     - 'tlab-casablanca':
-         lab-name: 'tlab'
-         tenant-name: 'ETE-OOM-Test'
-         branch: 'master'
-     - 'windriver-casablanca':
+     - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-Jenkins'
          branch: 'master'
@@ -35,7 +20,7 @@
     jobs:
      - '{env}-oom-verify'
     env:
-     - 'windriver-casablanca':
+     - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-Jenkins'
          branch: 'master'
@@ -43,29 +28,16 @@
 - project:
     name: heat-tests
     jobs:
+     - '{env}-heat-deploy'
      - '{env}-heat-healthcheck'
      - '{env}-heat-instantiate'
      - '{env}-heat-stability72hr'
     env:
-     - 'tlab-casablanca':
+     - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
          branch: 'master'
-     - 'windriver-casablanca':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-Stable'
-         branch: 'master'
-
-- project:
-    name: heat-deploy
-    jobs:
-     - '{env}-heat-deploy'
-    env:
-     - 'tlab-casablanca':
-         lab-name: 'tlab'
-         tenant-name: 'ETE-HEAT-Test'
-         branch: 'master'
-     - 'windriver-casablanca':
+     - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-Stable'
          branch: 'master'
