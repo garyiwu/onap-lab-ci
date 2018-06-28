@@ -426,6 +426,8 @@
             RESULT=$?
             if [ $RESULT -eq 0 ]; then
               break
+            elif [ $RESULT -gt 15 ]; then
+              RESULT=15
             fi
           done
 
