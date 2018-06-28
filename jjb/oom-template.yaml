@@ -469,7 +469,7 @@
 
 
           cd $WORKSPACE/archives
-          rebot -N "ONAP Daily" --removekeywords wuks --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
+          rebot -N "ONAP Daily" --removekeywords wuks --output output.xml --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
 
           exit 0
     publishers:
