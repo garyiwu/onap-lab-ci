@@ -1,6 +1,7 @@
 - project:
     name: oom-tests
     jobs:
+     - '{env}-oom-daily'
      - '{env}-oom-deploy'
      - '{env}-oom-healthcheck'
      - '{env}-oom-instantiate'

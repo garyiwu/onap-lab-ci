@@ -358,3 +358,121 @@
     publishers:
       - integration-robot
 
+- job-template:
+    name: '{env}-oom-daily'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - gerrit-trigger-scm
+    triggers:
+      - gerrit-trigger-patch-submitted:
+          project: 'integration'
+          branch: '{branch}'
+          files: 'version-manifest/src/main/resources/docker-manifest.csv'
+    wrappers:
+      - timestamps
+    builders:
+      - shell: |
+          #!/bin/bash
+          set +x
+          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
+          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
+          source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
+
+          set -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+
+          SSH_KEY=~/.ssh/onap_key
+          ENV_FILE=./env/{lab-name}/{tenant-name}.env
+          SO_ENCRYPTION_KEY=aa3871669d893c7fb8abbcda31b88b4f
+          export OS_PASSWORD_ENCRYPTED=$(echo -n "$OS_PASSWORD" | openssl aes-128-ecb -e -K "$SO_ENCRYPTION_KEY" -nosalt | xxd -c 256 -p)
+
+          $WORKSPACE/test/ete/scripts/teardown-onap.sh
+          cd $WORKSPACE/deployment/heat/onap-oom
+          envsubst < $ENV_FILE > $ENV_FILE~
+          if ! openstack stack create -t ./onap-oom.yaml -e $ENV_FILE~ onap-oom --parameter gerrit_branch=$GERRIT_BRANCH --parameter gerrit_refspec=$GERRIT_REFSPEC --parameter docker_manifest=docker-manifest.csv; then
+            exit 1
+          fi
+          while [ "CREATE_IN_PROGRESS" == "$(openstack stack show -c stack_status -f value onap-oom)" ]; do
+            sleep 30
+          done
+
+          STATUS=$(openstack stack show -c stack_status -f value onap-oom)
+          echo $STATUS
+          if [ "CREATE_COMPLETE" != "$STATUS" ]; then
+            exit 1
+          fi
+
+          for i in $(seq 1 30); do
+            sleep 30
+            RANCHER_IP=$(openstack stack output show onap-oom rancher_vm_ip -c output_value -f value)
+            K8S_IP=$(openstack stack output show onap-oom k8s_1_vm_ip -c output_value -f value)
+            timeout 1 ping -c 1 "$RANCHER_IP" && break
+          done
+          ssh-keygen -R $RANCHER_IP
+
+          ssh -o StrictHostKeychecking=no -i $SSH_KEY ubuntu@$RANCHER_IP "sed -u '/Cloud-init.*finished/q' <(tail -n+0 -f /var/log/cloud-init-output.log)"
+          sleep 30m
+
+          ROBOT_POD=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl --namespace onap get pods"' | grep robot | sed 's/ .*//')
+          if [ "$ROBOT_POD" == "" ]; then
+            exit 1
+          fi
+
+          RESULT=0
+          for n in $(seq 1 10); do
+            echo "Wait count $n of 10"
+            sleep $RESULT'm'
+            timeout 5m ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap health"'
+            RESULT=$?
+            if [ $RESULT -eq 0 ]; then
+              break
+            fi
+          done
+
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep health | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/health
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/healthcheck
+
+          sleep 15m
+
+          ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/demo-k8s.sh onap init"'
+          LOG_DIR="demo/InitDemo"
+          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/demo-init
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/demo-init
+
+          ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap healthdist"'
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep healthdist | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/healthdist
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/healthdist
+
+          ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap distribute"'
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep distribute | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/distribute
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/distribute
+
+          ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap instantiate"'
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep instantiate | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/instantiate
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/instantiate
+
+
+          cd $WORKSPACE/archives
+          rebot -N "ONAP Daily" --removekeywords wuks --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
+
+          exit 0
+    publishers:
+      - integration-robot
+
