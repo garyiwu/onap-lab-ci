@@ -31,6 +31,7 @@
           exit 0
     publishers:
       - integration-robot
+      - archive-logs
 
 - job-template:
     name: '{env}-heat-instantiate'
@@ -88,6 +89,7 @@
           exit 0
     publishers:
       - integration-robot
+      - archive-logs
 
 - job-template:
     name: '{env}-heat-stability72hr'
@@ -137,6 +139,7 @@
           exit 0
     publishers:
       - integration-robot
+      - archive-logs
 
 - job-template:
     name: '{env}-heat-deploy'
@@ -175,6 +178,7 @@
           done
     publishers:
       - integration-robot
+      - archive-logs
 
 - job-template:
     name: '{env}-heat-daily'
@@ -265,3 +269,4 @@
           exit 0
     publishers:
       - integration-robot
+      - archive-logs
