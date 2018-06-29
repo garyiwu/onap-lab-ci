@@ -255,7 +255,7 @@
           LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep instantiate | head -1")
           echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
           mkdir -p $WORKSPACE/archives/instantiate
-          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/instantiate
 
           cd $WORKSPACE/archives
           rebot -N "ONAP Daily" --removekeywords wuks --output output.xml --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
