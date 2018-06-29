@@ -51,8 +51,8 @@
     builders:
       - shell: |
           #!/bin/bash -x
-          ssh huawei@10.145.122.118 "mkdir -p /var/www/logs/$JOB_NAME/$BUILD_NUMBER"
-          rsync -avtz $WORKSPACE/archives/ huawei@10.145.122.118:/var/www/logs/$JOB_NAME/$BUILD_NUMBER
+          ssh huawei@10.145.122.118 "mkdir -p /var/www/html/logs/$JOB_NAME/$BUILD_NUMBER"
+          rsync -avtz $WORKSPACE/archives/ huawei@10.145.122.118:/var/www/html/logs/$JOB_NAME/$BUILD_NUMBER
 
 - trigger:
     name: gerrit-trigger-patch-submitted
