@@ -23,7 +23,7 @@
     env:
      - 'windriver':
          lab-name: 'windriver'
-         tenant-name: 'Integration-Jenkins'
+         tenant-name: 'Integration-Stable'
          branch: 'master'
 
 - project:
