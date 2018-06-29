@@ -186,6 +186,8 @@
           branch: "{branch}"
     wrappers:
       - timestamps
+    triggers:
+      - timed: 'H */4 * * *'
     builders:
       - shell: |
           #!/bin/bash
