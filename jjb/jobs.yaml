@@ -29,6 +29,7 @@
 - project:
     name: heat-tests
     jobs:
+     - '{env}-heat-daily'
      - '{env}-heat-deploy'
      - '{env}-heat-healthcheck'
      - '{env}-heat-instantiate'

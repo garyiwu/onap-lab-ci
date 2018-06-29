@@ -157,6 +157,9 @@
           source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
 
           set -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+
           $WORKSPACE/test/ete/scripts/deploy-onap.sh {lab-name}
           if [ $? -ne 0 ]; then
             exit 1
@@ -170,5 +173,93 @@
             $WORKSPACE/test/ete/scripts/run-healthcheck.sh && break
             n=$[$n+1]
           done
+    publishers:
+      - integration-robot
+
+- job-template:
+    name: '{env}-heat-daily'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git-integration:
+          branch: "{branch}"
+    wrappers:
+      - timestamps
+    builders:
+      - shell: |
+          #!/bin/bash
+          set +x
+          . $WORKSPACE/test/ete/labs/{lab-name}/{tenant-name}-openrc
+          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
+          source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
+
+          set -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+
+          SSH_KEY=~/.ssh/onap_key
+
+          $WORKSPACE/test/ete/scripts/deploy-onap.sh {lab-name}
+          if [ $? -ne 0 ]; then
+            exit 1
+          fi
+
+          cd $WORKSPACE/test/ete/scripts
+          ROBOT_IP=$(./get-floating-ip.sh onap-robot)
+          echo "ROBOT_IP=$ROBOT_IP"
+          if [ "" == "$ROBOT_IP" ]; then
+            exit 1
+          fi
+
+          sleep 15m
+
+          RESULT=0
+          for n in $(seq 1 10); do
+            echo "Wait count $n of 10"
+            sleep $RESULT'm'
+            $WORKSPACE/test/ete/scripts/run-healthcheck.sh
+            RESULT=$?
+            if [ $RESULT -eq 0 ]; then
+              break
+            elif [ $RESULT -gt 15 ]; then
+              RESULT=15
+            fi
+          done
+          LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep health | head -1")
+          echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/healthcheck
+          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/healthcheck
+
+          sleep 15m
+
+          ssh -i $SSH_KEY root@$ROBOT_IP "/opt/demo.sh init"
+          LOG_DIR="demo/InitDemo"
+          echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/demo-init
+          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/demo-init
+
+          ssh -i $SSH_KEY root@$ROBOT_IP "/opt/ete.sh healthdist"
+          LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep healthdist | head -1")
+          echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/healthdist
+          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/healthdist
+
+          ssh -i $SSH_KEY root@$ROBOT_IP "/opt/ete.sh distribute"
+          LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep distribute | head -1")
+          echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/distribute
+          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/distribute
+
+          ssh -i $SSH_KEY root@$ROBOT_IP "/opt/ete.sh instantiate"
+          LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep instantiate | head -1")
+          echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/instantiate
+          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/
+
+          cd $WORKSPACE/archives
+          rebot -N "ONAP Daily" --removekeywords wuks --output output.xml --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
+
+          exit 0
     publishers:
       - integration-robot
