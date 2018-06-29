@@ -14,6 +14,7 @@
     properties:
       - build-blocker:
           blocking-jobs:
+            - "{env}-heat-daily"
             - "{env}-heat-deploy"
     builders:
       - shell: |
