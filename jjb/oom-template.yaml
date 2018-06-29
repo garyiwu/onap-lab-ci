@@ -9,13 +9,6 @@
           branch: "{branch}"
     wrappers:
       - timestamps
-    triggers:
-      - timed: 'H/15 * * * *'
-    properties:
-      - build-blocker:
-          blocking-jobs:
-            - "{env}-oom-daily"
-            - "{env}-oom-deploy"
     builders:
       - run-oom-ete-tag:
           lab-name: '{lab-name}'
