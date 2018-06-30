@@ -2,9 +2,9 @@
     name: oom-tests
     jobs:
      - '{env}-oom-daily'
-     - '{env}-oom-deploy'
-     - '{env}-oom-healthcheck'
-     - '{env}-oom-instantiate'
+#     - '{env}-oom-deploy'
+#     - '{env}-oom-healthcheck'
+#     - '{env}-oom-instantiate'
 #     - '{env}-oom-stability72hr'
     env:
      - 'tlab':
@@ -30,9 +30,9 @@
     name: heat-tests
     jobs:
      - '{env}-heat-daily'
-     - '{env}-heat-deploy'
-     - '{env}-heat-healthcheck'
-     - '{env}-heat-instantiate'
+#     - '{env}-heat-deploy'
+#     - '{env}-heat-healthcheck'
+#     - '{env}-heat-instantiate'
 #     - '{env}-heat-stability72hr'
     env:
      - 'tlab':
