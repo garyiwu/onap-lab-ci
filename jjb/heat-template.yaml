@@ -184,6 +184,9 @@
           branch: "{branch}"
     wrappers:
       - timestamps
+      - timeout:
+          timeout: 240
+          fail: true
     triggers:
       - timed: 'H */4 * * *'
     builders:

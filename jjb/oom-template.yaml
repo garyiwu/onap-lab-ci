@@ -273,20 +273,8 @@
 
           exit 0
 
-- job-template:
-    name: '{env}-oom-verify'
-    project-type: freestyle
-    lab-name: ''
-    tenant-name: ''
-    scm:
-      - gerrit-trigger-scm
-    triggers:
-      - gerrit-trigger-patch-submitted:
-          project: 'integration'
-          branch: '{branch}'
-          files: 'version-manifest/src/main/resources/docker-manifest.csv'
-    wrappers:
-      - timestamps
+- builder:
+    name: run-oom-ete
     builders:
       - shell: |
           #!/bin/bash
@@ -307,90 +295,7 @@
           $WORKSPACE/test/ete/scripts/teardown-onap.sh
           cd $WORKSPACE/deployment/heat/onap-oom
           envsubst < $ENV_FILE > $ENV_FILE~
-          if ! openstack stack create -t ./onap-oom.yaml -e $ENV_FILE~ onap-oom --parameter gerrit_branch=$GERRIT_BRANCH --parameter gerrit_refspec=$GERRIT_REFSPEC --parameter docker_manifest=docker-manifest.csv; then
-            exit 1
-          fi
-          while [ "CREATE_IN_PROGRESS" == "$(openstack stack show -c stack_status -f value onap-oom)" ]; do
-            sleep 20
-          done
-
-          STATUS=$(openstack stack show -c stack_status -f value onap-oom)
-          echo $STATUS
-          if [ "CREATE_COMPLETE" != "$STATUS" ]; then
-            exit 1
-          fi
-
-          for i in $(seq 1 30); do
-            sleep 30
-            RANCHER_IP=$(openstack stack output show onap-oom rancher_vm_ip -c output_value -f value)
-            K8S_IP=$(openstack stack output show onap-oom k8s_1_vm_ip -c output_value -f value)
-            timeout 1 ping -c 1 "$RANCHER_IP" && break
-          done
-          ssh-keygen -R $RANCHER_IP
-
-          ssh -o StrictHostKeychecking=no -i $SSH_KEY ubuntu@$RANCHER_IP "sed -u '/Cloud-init.*finished/q' <(tail -n+0 -f /var/log/cloud-init-output.log)"
-
-          for n in $(seq 1 6); do
-            echo "Wait count $n of 6"
-            sleep 15m
-            timeout 15m ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap health"'
-            RESULT=$?
-            if [ $RESULT -eq 0 ]; then
-              break
-            fi
-          done
-          ROBOT_POD=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl --namespace onap get pods"' | grep robot | sed 's/ .*//')
-          if [ "$ROBOT_POD" == "" ]; then
-            exit 1
-          fi
-
-          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep health | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
-          if [ "$LOG_DIR" == "" ]; then
-            exit 1
-          fi
-
-          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
-
-          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
-          exit 0
-    publishers:
-      - integration-robot
-      - archive-logs
-
-- job-template:
-    name: '{env}-oom-daily'
-    project-type: freestyle
-    lab-name: ''
-    tenant-name: ''
-    scm:
-      - git-integration:
-          branch: "{branch}"
-    wrappers:
-      - timestamps
-    triggers:
-      - timed: 'H */4 * * *'
-    builders:
-      - shell: |
-          #!/bin/bash
-          set +x
-          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
-          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
-          source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
-
-          set -x
-          rm -rf $WORKSPACE/archives
-          mkdir -p $WORKSPACE/archives
-
-          SSH_KEY=~/.ssh/onap_key
-          ENV_FILE=./env/{lab-name}/{tenant-name}.env
-          SO_ENCRYPTION_KEY=aa3871669d893c7fb8abbcda31b88b4f
-          export OS_PASSWORD_ENCRYPTED=$(echo -n "$OS_PASSWORD" | openssl aes-128-ecb -e -K "$SO_ENCRYPTION_KEY" -nosalt | xxd -c 256 -p)
-
-          $WORKSPACE/test/ete/scripts/teardown-onap.sh
-          cd $WORKSPACE/deployment/heat/onap-oom
-          envsubst < $ENV_FILE > $ENV_FILE~
-          if ! openstack stack create -t ./onap-oom.yaml -e $ENV_FILE~ onap-oom; then
+          if ! openstack stack create -t ./onap-oom.yaml -e $ENV_FILE~ onap-oom --parameter gerrit_branch={gerrit_branch} --parameter gerrit_refspec={gerrit_refspec}; then
             exit 1
           fi
           while [ "CREATE_IN_PROGRESS" == "$(openstack stack show -c stack_status -f value onap-oom)" ]; do
@@ -469,9 +374,55 @@
 
 
           cd $WORKSPACE/archives
-          rebot -N "ONAP Daily" --removekeywords wuks --output output.xml --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
+          rebot -N "ONAP Verify" --removekeywords wuks --output output.xml --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
 
           exit 0
+
+- job-template:
+    name: '{env}-oom-verify'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - gerrit-trigger-scm
+    triggers:
+      - gerrit-trigger-patch-submitted:
+          project: 'integration'
+          branch: '{branch}'
+          files: 'version-manifest/src/main/resources/docker-manifest.csv'
+    wrappers:
+      - timestamps
+    builders:
+      - run-oom-ete:
+          lab-name: '{lab-name}'
+          tenant-name: '{tenant-name}'
+          gerrit_branch: '$GERRIT_BRANCH'
+          gerrit_refspec: '$GERRIT_REFSPEC'
+    publishers:
+      - integration-robot
+      - archive-logs
+
+- job-template:
+    name: '{env}-oom-daily'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git-integration:
+          branch: "{branch}"
+    wrappers:
+      - timestamps
+      - timeout:
+          timeout: 240
+          fail: true
+    triggers:
+      - timed: 'H */4 * * *'
+    builders:
+      - run-oom-ete:
+          lab-name: '{lab-name}'
+          tenant-name: '{tenant-name}'
+          gerrit_branch: '{branch}'
+          gerrit_refspec: 'refs/heads/master'
     publishers:
       - integration-robot
       - archive-logs
