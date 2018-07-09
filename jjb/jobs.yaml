@@ -13,7 +13,7 @@
          branch: 'master'
      - 'windriver':
          lab-name: 'windriver'
-         tenant-name: 'Integration-Jenkins'
+         tenant-name: 'Integration-OOM-Daily'
          branch: 'master'
 
 - project:
@@ -23,7 +23,7 @@
     env:
      - 'windriver':
          lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
+         tenant-name: 'Integration-OOM-Verify'
          branch: 'master'
 
 - project:
@@ -41,5 +41,5 @@
          branch: 'master'
      - 'windriver':
          lab-name: 'windriver'
-         tenant-name: 'Integration-Stable'
+         tenant-name: 'Integration-HEAT-Daily'
          branch: 'master'
