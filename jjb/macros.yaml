@@ -56,6 +56,30 @@
           curl -f "http://localhost:8080/jenkins/job/$JOB_NAME/$BUILD_NUMBER/timestamps/?time=HH:mm:ssZ&appendLog" >  $WORKSPACE/archives/console-source-timestamp.log
           rsync -avtz $WORKSPACE/archives/ huawei@10.145.122.118:/var/www/html/logs/$JOB_NAME/$BUILD_NUMBER
 
+- publisher:
+    name: trigger-lf-lab-job
+    publishers:
+      - postbuildscript:
+          builders:
+            - role: BOTH
+              build-on:
+                - ABORTED
+                - FAILURE
+                - NOT_BUILT
+                - SUCCESS
+                - UNSTABLE
+              build-steps:
+                - trigger-lf-lab-job
+          mark-unstable-if-failed: true
+
+- builder:
+    name: trigger-lf-lab-job
+    builders:
+      - shell: |
+          #!/bin/bash -v
+          CRUMB=$(curl -s -u "$LF_USERNAME:$LF_PASSWORD" 'https://jenkins.onap.org/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+          curl -u "$LF_USERNAME:$LF_PASSWORD" -H "$CRUMB" -X POST "https://jenkins.onap.org/job/$JOB_NAME/buildWithParameters?SRC_BUILD_URL=${BUILD_URL}&LOG_DIR_URL=http://12.234.32.117/logs/$JOB_NAME/$BUILD_NUMBER/"
+
 - trigger:
     name: gerrit-trigger-patch-submitted
     triggers:
