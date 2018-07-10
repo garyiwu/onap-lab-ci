@@ -69,16 +69,21 @@
                 - SUCCESS
                 - UNSTABLE
               build-steps:
-                - trigger-lf-lab-job
+                - trigger-lf-lab-job:
+                    lab-name: '{lab-name}'
           mark-unstable-if-failed: true
 
 - builder:
     name: trigger-lf-lab-job
     builders:
       - shell: |
-          #!/bin/bash -v
+          #!/bin/bash
+          set +x
+          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
+
+          set -v
           CRUMB=$(curl -s -u "$LF_USERNAME:$LF_PASSWORD" 'https://jenkins.onap.org/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
-          curl -u "$LF_USERNAME:$LF_PASSWORD" -H "$CRUMB" -X POST "https://jenkins.onap.org/job/$JOB_NAME/buildWithParameters?SRC_BUILD_URL=${BUILD_URL}&LOG_DIR_URL=http://12.234.32.117/logs/$JOB_NAME/$BUILD_NUMBER/"
+          curl -s -u "$LF_USERNAME:$LF_PASSWORD" -H "$CRUMB" -X POST "https://jenkins.onap.org/job/$JOB_NAME/buildWithParameters?SRC_BUILD_URL=$BUILD_URL&LOG_DIR_URL=http://12.234.32.117/logs/$JOB_NAME/$BUILD_NUMBER/"
 
 - trigger:
     name: gerrit-trigger-patch-submitted

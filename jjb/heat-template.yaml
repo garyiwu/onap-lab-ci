@@ -267,3 +267,5 @@
     publishers:
       - integration-robot
       - archive-logs
+      - trigger-lf-lab-job:
+          lab-name: '{lab-name}'
