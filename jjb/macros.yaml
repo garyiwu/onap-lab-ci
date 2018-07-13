@@ -56,6 +56,13 @@
           curl -s -f "http://localhost:8080/jenkins/job/$JOB_NAME/$BUILD_NUMBER/timestamps/?time=HH:mm:ssZ&appendLog" >  $WORKSPACE/archives/console-source-timestamp.log
           rsync -avtz $WORKSPACE/archives/ huawei@10.145.122.118:/var/www/html/logs/$JOB_NAME/$BUILD_NUMBER
 
+- builder:
+    name: robot-influxdb
+    builders:
+      - shell: |
+          #!/bin/bash -x
+          $JENKINS_HOME/onap-lab-ci/scripts/process-robot.sh $WORKSPACE/archives/output.xml $JOB_NAME $BUILD_NUMBER
+
 - publisher:
     name: trigger-lf-lab-job
     publishers:
