@@ -24,6 +24,12 @@ write_files:
     Acquire::http::Proxy "http://10.145.122.117:8000/";
     EOF
 
+    source /etc/lsb-release
+    curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+    echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+    curl https://packagecloud.io/gpg.key | sudo apt-key add -
+    echo "deb https://packagecloud.io/grafana/stable/debian/ stretch main" | sudo tee /etc/apt/sources.list.d/grafana.list
+
     apt-get update
 
     cat >> /etc/inputrc <<EOF
@@ -39,13 +45,16 @@ write_files:
     git config --global user.name "grafana"
     apt-get -y install etckeeper
 
-    curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
-    source /etc/lsb-release
-    echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
-    apt-get update
-    apt-get install influxdb
+    apt-get -y install influxdb
+    apt-get -y install grafana
+
+    systemctl daemon-reload
+
     systemctl enable influxdb
     systemctl start influxdb
+
+    systemctl enable grafana-server.service
+    systemctl start grafana-server
 
 runcmd:
 - /opt/format-disks
