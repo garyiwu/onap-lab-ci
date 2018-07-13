@@ -6,16 +6,34 @@ if [ "$#" -ne 1 ]; then
 fi
 ROBOT_OUTPUT=$1
 
-#TMP_XML=$(mktemp --suffix=.xml)
-#xmlstarlet ed -d '//kw' -d '//tags' -d '//timeout' $ROBOT_OUTPUT | tr -d '\n' > $TMP_XML
-TIMESTR=$(xmlstarlet sel -t -v "/robot/@generated" /dev/shm/92/robot-plugin/o2.xml)
+TMP_XML=$(mktemp --suffix=.xml output-XXXX --tmpdir)
+xmlstarlet ed -d '//kw' -d '//timeout' -d '//tags' $ROBOT_OUTPUT | tr -d '\n' > $TMP_XML
+TIMESTR=$(xmlstarlet sel -t -v "/robot/@generated" $TMP_XML)
 TIME=$(date -d "${TIMESTR}Z" +%s%N)
-xmlstarlet sel -t -m "//test" -c "." -n /dev/shm/92/robot-plugin/o3.xml | while read test; do
+
+# test
+xmlstarlet sel -t -m "//test" -c "." -n $TMP_XML | while read test; do
     NAME=$(echo "$test" | xmlstarlet sel -t -v "/test/@name" | tr ' ' '_' | xmlstarlet unesc)
     if [ "PASS" = $(echo "$test" | xmlstarlet sel -t -v "/test/status/@status" ) ]; then
-        PASS=t
+        PASS=true
     else
-        PASS=f
+        PASS=false
     fi
     echo insert test,name=$NAME pass=$PASS $TIME
+done
+
+# suite
+xmlstarlet sel -t -m "/robot/statistics/suite/stat" -c "." -n $TMP_XML | while read suite; do
+    NAME=$(echo "$suite" | xmlstarlet sel -t -m "/stat" -v . | tr ' ' '_' | xmlstarlet unesc)
+    PASS=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@pass" )
+    FAIL=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@fail" )
+    echo insert suite,name=$NAME pass=$PASS,fail=$FAIL $TIME
+done
+
+# tag
+xmlstarlet sel -t -m "/robot/statistics/tag/stat" -c "." -n $TMP_XML | while read tag; do
+    NAME=$(echo "$tag" | xmlstarlet sel -t -m "/stat" -v . | tr ' ' '_' | xmlstarlet unesc)
+    PASS=$(echo "$tag" | xmlstarlet sel -t -v "/stat/@pass" )
+    FAIL=$(echo "$tag" | xmlstarlet sel -t -v "/stat/@fail" )
+    echo insert tag,name=$NAME pass=$PASS,fail=$FAIL $TIME
 done
