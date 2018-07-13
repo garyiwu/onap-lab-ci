@@ -1,10 +1,12 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ]; then
-    echo "$0 <output.xml>"
+if [ "$#" -ne 3 ]; then
+    echo "$0 <output.xml> <job> <build>"
     exit 1
 fi
 ROBOT_OUTPUT=$1
+JOB=$2
+BUILD=$3
 
 TMP_XML=$(mktemp --suffix=.xml output-XXXX --tmpdir)
 xmlstarlet ed -d '//kw' -d '//timeout' -d '//tags' $ROBOT_OUTPUT | tr -d '\n' > $TMP_XML
@@ -19,7 +21,7 @@ xmlstarlet sel -t -m "//test" -c "." -n $TMP_XML | while read test; do
     else
         PASS=false
     fi
-    echo insert test,name=$NAME pass=$PASS $TIME
+    echo insert test,job=$JOB,name=$NAME build=$BUILD,pass=$PASS $TIME
 done
 
 # suite
@@ -27,7 +29,7 @@ xmlstarlet sel -t -m "/robot/statistics/suite/stat" -c "." -n $TMP_XML | while r
     NAME=$(echo "$suite" | xmlstarlet sel -t -m "/stat" -v . | tr ' ' '_' | xmlstarlet unesc)
     PASS=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@pass" )
     FAIL=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@fail" )
-    echo insert suite,name=$NAME pass=$PASS,fail=$FAIL $TIME
+    echo insert suite,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,fail=$FAIL $TIME
 done
 
 # tag
@@ -35,5 +37,5 @@ xmlstarlet sel -t -m "/robot/statistics/tag/stat" -c "." -n $TMP_XML | while rea
     NAME=$(echo "$tag" | xmlstarlet sel -t -m "/stat" -v . | tr ' ' '_' | xmlstarlet unesc)
     PASS=$(echo "$tag" | xmlstarlet sel -t -v "/stat/@pass" )
     FAIL=$(echo "$tag" | xmlstarlet sel -t -v "/stat/@fail" )
-    echo insert tag,name=$NAME pass=$PASS,fail=$FAIL $TIME
+    echo insert tag,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,fail=$FAIL $TIME
 done
