@@ -21,7 +21,9 @@ xmlstarlet sel -t -m "//test" -c "." -n $TMP_XML | while read test; do
     else
         PASS=false
     fi
-    echo insert test,job=$JOB,name=$NAME build=$BUILD,pass=$PASS $TIME
+    STARTTIME=$(date -d "$(echo $test | xmlstarlet sel -t -v "/test/status/@starttime")Z" +%s%N)
+    ENDTIME=$(date -d "$(echo $test | xmlstarlet sel -t -v "/test/status/@endtime")Z" +%s%N)
+    echo insert test,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,starttime=$STARTTIME,endtime=$ENDTIME $TIME
 done
 
 # suite
