@@ -342,7 +342,7 @@
           mkdir -p $WORKSPACE/archives/healthcheck
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/healthcheck
 
-          sleep 30m
+          sleep 15m
 
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/demo-k8s.sh onap init"'
           LOG_DIR="demo/InitDemo"
@@ -350,8 +350,6 @@
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
           mkdir -p $WORKSPACE/archives/demo-init
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/demo-init
-
-          sleep 15m
 
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap healthdist"'
           LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep healthdist | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
