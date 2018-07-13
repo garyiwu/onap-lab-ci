@@ -29,6 +29,18 @@
           unstable-threshold: 75
           pass-threshold: 100
           only-critical: false
+      - postbuildscript:
+          builders:
+            - role: BOTH
+              build-on:
+                - ABORTED
+                - FAILURE
+                - NOT_BUILT
+                - SUCCESS
+                - UNSTABLE
+              build-steps:
+                - robot-influxdb
+          mark-unstable-if-failed: true
 
 - publisher:
     name: archive-logs
