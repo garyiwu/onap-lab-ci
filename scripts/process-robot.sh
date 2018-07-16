@@ -45,10 +45,14 @@ done
 
 # suite
 xmlstarlet sel -t -m "/robot/statistics/suite/stat" -c "." -n $TMP_XML | while read suite; do
+    ID=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@id" )
+    STATUS=$(xmlstarlet sel -t -m "//suite[@id=\"$ID\"]/status" -c "." -n $TMP_XML)
+    STARTTIME=$(date -d "$(echo $STATUS | xmlstarlet sel -t -v "/status/@starttime")Z" +%s%N)
+    ENDTIME=$(date -d "$(echo $STATUS | xmlstarlet sel -t -v "/status/@endtime")Z" +%s%N)
     NAME=$(echo "$suite" | xmlstarlet sel -t -m "/stat" -v . | tr ' ' '_' | xmlstarlet unesc)
     PASS=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@pass" )
     FAIL=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@fail" )
-    echo suite,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,fail=$FAIL $TIME | tee -a $POINTS_FILE
+    echo suite,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,fail=$FAIL,starttime=$STARTTIME,endtime=$ENDTIME $TIME | tee -a $POINTS_FILE
 done
 
 # tag
