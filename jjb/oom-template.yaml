@@ -374,7 +374,7 @@
 
 
           cd $WORKSPACE/archives
-          rebot -N "ONAP Verify" --removekeywords wuks --output output.xml --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
+          rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
 
           exit 0
 
@@ -416,7 +416,7 @@
           timeout: 240
           fail: true
     triggers:
-      - timed: 'H */4 * * *'
+      - timed: 'H 7 * * *'
     builders:
       - run-oom-ete:
           lab-name: '{lab-name}'
