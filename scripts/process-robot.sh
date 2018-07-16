@@ -12,6 +12,11 @@ INFLUX_ENDPOINT='http://10.145.123.20:8086/write?db=robot'
 
 TMP_XML=$(mktemp --suffix=.xml output-XXXX --tmpdir)
 xmlstarlet ed -d '//kw' -d '//timeout' -d '//tags' $ROBOT_OUTPUT | tr -d '\n' > $TMP_XML
+
+# Canonicalize Robot suite names
+sed -i 's/ONAP Verify/ONAP CI/g' $TMP_XML
+sed -i 's/ONAP Daily/ONAP CI/g' $TMP_XML
+
 TIMESTR=$(xmlstarlet sel -t -v "/robot/@generated" $TMP_XML)
 TIME=$(date -d "${TIMESTR}Z" +%s%N)
 
