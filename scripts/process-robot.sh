@@ -11,12 +11,16 @@ BUILD=$3
 INFLUX_ENDPOINT='http://10.145.123.20:8086/write?db=robot'
 
 TMP_XML=/tmp/output-$JOB-$BUILD.xml
-xmlstarlet ed -d '//kw' -d '//timeout' -d '//tags' $ROBOT_OUTPUT | tr -d '\n' > $TMP_XML
 
-# Canonicalize Robot suite names
-sed -i 's/ONAP.Verify/ONAP_CI/g' $TMP_XML
-sed -i 's/ONAP.Daily/ONAP_CI/g' $TMP_XML
-sed -i 's/OpenECOMP.ETE/ONAP_CI/g' $TMP_XML
+if [ ! -f $TMP_XML ]; then
+    xmlstarlet ed -d '//kw' -d '//timeout' -d '//tags' $ROBOT_OUTPUT | tr -d '\n' > $TMP_XML
+
+    # Canonicalize Robot suite names
+    sed -i 's/ONAP.Verify/ONAP_CI/g' $TMP_XML
+    sed -i 's/ONAP.Daily/ONAP_CI/g' $TMP_XML
+    sed -i 's/OpenECOMP.ETE/ONAP_CI/g' $TMP_XML
+fi
+
 
 TIMESTR=$(xmlstarlet sel -t -v "/robot/@generated" $TMP_XML)
 TIME=$(date -d "${TIMESTR}Z" +%s%N)
@@ -27,13 +31,15 @@ POINTS_FILE=/tmp/points-$JOB-$BUILD.txt
 xmlstarlet sel -t -m "//test" -c "." -n $TMP_XML | while read test; do
     NAME=$(echo "$test" | xmlstarlet sel -t -v "/test/@name" | tr ' ' '_' | xmlstarlet unesc)
     if [ "PASS" = $(echo "$test" | xmlstarlet sel -t -v "/test/status/@status" ) ]; then
-        PASS=true
+        PASS=1
+        FAIL=0
     else
-        PASS=false
+        PASS=0
+        FAIL=1
     fi
     STARTTIME=$(date -d "$(echo $test | xmlstarlet sel -t -v "/test/status/@starttime")Z" +%s%N)
     ENDTIME=$(date -d "$(echo $test | xmlstarlet sel -t -v "/test/status/@endtime")Z" +%s%N)
-    echo test,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,starttime=$STARTTIME,endtime=$ENDTIME $TIME | tee -a $POINTS_FILE
+    echo test,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,fail=$FAIL,starttime=$STARTTIME,endtime=$ENDTIME $TIME | tee -a $POINTS_FILE
 done
 
 # suite
