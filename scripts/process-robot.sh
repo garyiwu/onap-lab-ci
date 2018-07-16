@@ -16,7 +16,7 @@ xmlstarlet ed -d '//kw' -d '//timeout' -d '//tags' $ROBOT_OUTPUT | tr -d '\n' > 
 # Canonicalize Robot suite names
 sed -i 's/ONAP Verify/ONAP CI/g' $TMP_XML
 sed -i 's/ONAP Daily/ONAP CI/g' $TMP_XML
-sed -i 's/OpenECOMP_ETE/ONAP CI/g' $TMP_XML
+sed -i 's/OpenECOMP ETE/ONAP CI/g' $TMP_XML
 
 TIMESTR=$(xmlstarlet sel -t -v "/robot/@generated" $TMP_XML)
 TIME=$(date -d "${TIMESTR}Z" +%s%N)
