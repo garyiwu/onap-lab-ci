@@ -26,6 +26,7 @@ TIMESTR=$(xmlstarlet sel -t -v "/robot/@generated" $TMP_XML)
 TIME=$(date -d "${TIMESTR}Z" +%s%N)
 
 POINTS_FILE=/tmp/points-$JOB-$BUILD.txt
+rm -f $POINTS_FILE
 
 # test
 xmlstarlet sel -t -m "//test" -c "." -n $TMP_XML | while read test; do
