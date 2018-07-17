@@ -234,6 +234,8 @@
           mkdir -p $WORKSPACE/archives/healthcheck
           rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/healthcheck
 
+          $WORKSPACE/test/ete/scripts/get-docker-versions.sh
+
           sleep 15m
 
           ssh -i $SSH_KEY root@$ROBOT_IP "/opt/demo.sh init"
