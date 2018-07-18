@@ -47,12 +47,18 @@ done
 xmlstarlet sel -t -m "/robot/statistics/suite/stat" -c "." -n $TMP_XML | while read suite; do
     ID=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@id" )
     STATUS=$(xmlstarlet sel -t -m "//suite[@id=\"$ID\"]/status" -c "." -n $TMP_XML)
-    STARTTIME=$(date -d "$(echo $STATUS | xmlstarlet sel -t -v "/status/@starttime")Z" +%s%N)
-    ENDTIME=$(date -d "$(echo $STATUS | xmlstarlet sel -t -v "/status/@endtime")Z" +%s%N)
+    STARTTIMESTR=$(echo $STATUS | xmlstarlet sel -t -v "/status/@starttime")
+    ENDTIMESTR=$(echo $STATUS | xmlstarlet sel -t -v "/status/@endtime")
     NAME=$(echo "$suite" | xmlstarlet sel -t -m "/stat" -v . | tr ' ' '_' | xmlstarlet unesc)
     PASS=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@pass" )
     FAIL=$(echo "$suite" | xmlstarlet sel -t -v "/stat/@fail" )
-    echo suite,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,fail=$FAIL,starttime=$STARTTIME,endtime=$ENDTIME $TIME | tee -a $POINTS_FILE
+    if [ "$STARTTIMESTR" != "N/A" ] && [ "$ENDTIMESTR" != "N/A" ]; then
+	STARTTIME=$(date -d "${STARTTIMESTR}Z" +%s%N)
+	ENDTIME=$(date -d "${ENDTIMESTR}Z" +%s%N)
+	echo suite,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,fail=$FAIL,starttime=$STARTTIME,endtime=$ENDTIME $TIME | tee -a $POINTS_FILE
+    else
+	echo suite,job=$JOB,name=$NAME build=$BUILD,pass=$PASS,fail=$FAIL $TIME | tee -a $POINTS_FILE
+    fi
 done
 
 # tag
