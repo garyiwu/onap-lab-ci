@@ -17,6 +17,16 @@
          branch: 'master'
 
 - project:
+    name: oom-staging-tests
+    jobs:
+     - '{env}-oom-staging-daily'
+    env:
+     - 'windriver':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-Jenkins'
+         branch: 'master'
+
+- project:
     name: oom-verify
     jobs:
      - '{env}-oom-verify'
