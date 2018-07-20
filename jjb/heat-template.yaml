@@ -174,21 +174,10 @@
       - integration-robot
       - archive-logs
 
-- job-template:
-    name: '{env}-heat-daily'
-    project-type: freestyle
-    lab-name: ''
-    tenant-name: ''
-    scm:
-      - git-integration:
-          branch: "{branch}"
-    wrappers:
-      - timestamps
-      - timeout:
-          timeout: 240
-          fail: true
-    triggers:
-      - timed: 'H 7 * * *'
+
+
+- builder:
+    name: run-heat-ete
     builders:
       - shell: |
           #!/bin/bash
@@ -203,7 +192,16 @@
 
           SSH_KEY=~/.ssh/onap_key
 
-          $WORKSPACE/test/ete/scripts/deploy-onap.sh {lab-name}
+          # apply manifest versions
+          DEMO_DIR=$ONAP_WORKDIR/demo
+          pushd $DEMO_DIR
+          git reset --hard origin
+          git pull
+          $WORKSPACE/version-manifest/src/main/scripts/update-heat-image-versions.sh $WORKSPACE/version-manifest/src/main/resources/{docker_manifest} $DEMO_DIR
+          git diff
+          popd
+
+          $WORKSPACE/test/ete/scripts/deploy-onap.sh {lab-name} $DEMO_DIR
           if [ $? -ne 0 ]; then
             exit 1
           fi
@@ -266,6 +264,86 @@
           rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
 
           exit 0
+
+
+- job-template:
+    name: '{env}-heat-verify'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - gerrit-trigger-scm
+    triggers:
+      - gerrit-trigger-patch-submitted:
+          project: 'integration'
+          branch: '{branch}'
+          files: 'version-manifest/src/main/resources/docker-manifest.csv'
+    wrappers:
+      - timestamps
+      - timeout:
+          timeout: 240
+          fail: true
+    builders:
+      - run-oom-ete:
+          lab-name: '{lab-name}'
+          tenant-name: '{tenant-name}'
+          docker_manifest: 'docker-manifest.csv'
+          gerrit_branch: '$GERRIT_BRANCH'
+          gerrit_refspec: '$GERRIT_REFSPEC'
+    publishers:
+      - integration-robot
+      - archive-logs
+
+- job-template:
+    name: '{env}-heat-daily'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git-integration:
+          branch: "{branch}"
+    wrappers:
+      - timestamps
+      - timeout:
+          timeout: 240
+          fail: true
+    triggers:
+      - timed: 'H 7 * * *'
+    builders:
+      - run-heat-ete:
+          lab-name: '{lab-name}'
+          tenant-name: '{tenant-name}'
+          docker_manifest: 'docker-manifest.csv'
+          gerrit_branch: '{branch}'
+          gerrit_refspec: 'refs/heads/master'
+    publishers:
+      - integration-robot
+      - archive-logs
+      - trigger-lf-lab-job:
+          lab-name: '{lab-name}'
+
+- job-template:
+    triggers_var:
+    name: '{env}-heat-staging-{frequency}'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git-integration:
+          branch: "{branch}"
+    wrappers:
+      - timestamps
+      - timeout:
+          timeout: 240
+          fail: true
+    triggers: '{obj:triggers_var}'
+    builders:
+      - run-oom-ete:
+          lab-name: '{lab-name}'
+          tenant-name: '{tenant-name}'
+          docker_manifest: 'docker-manifest-staging.csv'
+          gerrit_branch: '{branch}'
+          gerrit_refspec: 'refs/heads/master'
     publishers:
       - integration-robot
       - archive-logs

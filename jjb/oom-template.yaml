@@ -392,6 +392,9 @@
           files: 'version-manifest/src/main/resources/docker-manifest.csv'
     wrappers:
       - timestamps
+      - timeout:
+          timeout: 240
+          fail: true
     builders:
       - run-oom-ete:
           lab-name: '{lab-name}'
@@ -432,7 +435,8 @@
           lab-name: '{lab-name}'
 
 - job-template:
-    name: '{env}-oom-staging-daily'
+    triggers_var:
+    name: '{env}-oom-staging-{frequency}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -444,8 +448,7 @@
       - timeout:
           timeout: 240
           fail: true
-    triggers:
-      - timed: 'H 7 * * *'
+    triggers: '{obj:triggers_var}'
     builders:
       - run-oom-ete:
           lab-name: '{lab-name}'

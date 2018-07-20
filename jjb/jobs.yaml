@@ -1,11 +1,7 @@
 - project:
-    name: oom-tests
+    name: oom-release
     jobs:
      - '{env}-oom-daily'
-#     - '{env}-oom-deploy'
-#     - '{env}-oom-healthcheck'
-#     - '{env}-oom-instantiate'
-#     - '{env}-oom-stability72hr'
     env:
      - 'tlab':
          lab-name: 'tlab'
@@ -17,14 +13,21 @@
          branch: 'master'
 
 - project:
-    name: oom-staging-tests
+    name: oom-staging
     jobs:
-     - '{env}-oom-staging-daily'
+     - '{env}-oom-staging-{frequency}'
+    branch: 'master'
     env:
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Staging-Daily'
-         branch: 'master'
+         frequency: 'daily'
+         triggers_var:
+          - timed: 'H 7 * * *'
+     - 'windriver-sb04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
+         frequency: 'deploy'
 
 - project:
     name: oom-verify
@@ -37,13 +40,9 @@
          branch: 'master'
 
 - project:
-    name: heat-tests
+    name: heat-release
     jobs:
      - '{env}-heat-daily'
-#     - '{env}-heat-deploy'
-#     - '{env}-heat-healthcheck'
-#     - '{env}-heat-instantiate'
-#     - '{env}-heat-stability72hr'
     env:
      - 'tlab':
          lab-name: 'tlab'
@@ -53,3 +52,31 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-HEAT-Daily'
          branch: 'master'
+
+- project:
+    name: heat-staging
+    jobs:
+     - '{env}-heat-staging-{frequency}'
+    branch: 'master'
+    env:
+     - 'windriver':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-HEAT-Staging-Daily'
+         frequency: 'daily'
+         triggers_var:
+          - timed: 'H 7 * * *'
+     - 'windriver-sb07':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-07'
+         frequency: 'deploy'
+
+- project:
+    name: heat-verify
+    jobs:
+     - '{env}-heat-verify'
+    env:
+     - 'windriver':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-HEAT-Verify'
+         branch: 'master'
+
