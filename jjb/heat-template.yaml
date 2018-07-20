@@ -284,7 +284,7 @@
           timeout: 240
           fail: true
     builders:
-      - run-oom-ete:
+      - run-heat-ete:
           lab-name: '{lab-name}'
           tenant-name: '{tenant-name}'
           docker_manifest: 'docker-manifest.csv'
