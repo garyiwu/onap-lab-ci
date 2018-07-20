@@ -90,7 +90,7 @@
               build-steps:
                 - trigger-lf-lab-job:
                     lab-name: '{lab-name}'
-          mark-unstable-if-failed: true
+          mark-unstable-if-failed: false
 
 - builder:
     name: trigger-lf-lab-job
