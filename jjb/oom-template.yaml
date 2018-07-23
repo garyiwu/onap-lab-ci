@@ -420,7 +420,7 @@
           timeout: 240
           fail: true
     triggers:
-      - timed: 'H 7 * * *'
+      - timed: 'H 6 * * *'
     builders:
       - run-oom-ete:
           lab-name: '{lab-name}'
