@@ -1,16 +1,25 @@
 - project:
     name: oom-release
     jobs:
-     - '{env}-oom-daily'
+     - '{env}-oom-{frequency}'
+    branch: 'master'
     env:
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-OOM-Test'
-         branch: 'master'
+         frequency: 'daily'
+         triggers_var:
+          - timed: 'H 7 * * *'
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Daily'
-         branch: 'master'
+         frequency: 'daily'
+         triggers_var:
+          - timed: 'H 7 * * *'
+     - 'windriver-sb04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
+         frequency: 'deploy'
 
 - project:
     name: oom-staging
@@ -23,11 +32,7 @@
          tenant-name: 'Integration-OOM-Staging-Daily'
          frequency: 'daily'
          triggers_var:
-          - timed: 'H 7 * * *'
-     - 'windriver-sb04':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-04'
-         frequency: 'deploy'
+          - timed: 'H 8 * * *'
 
 - project:
     name: oom-verify
@@ -42,16 +47,25 @@
 - project:
     name: heat-release
     jobs:
-     - '{env}-heat-daily'
+     - '{env}-heat-{frequency}'
+    branch: 'master'
     env:
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
-         branch: 'master'
+         frequency: 'daily'
+         triggers_var:
+          - timed: 'H 6 * * *'
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-HEAT-Daily'
-         branch: 'master'
+         frequency: 'daily'
+         triggers_var:
+          - timed: 'H 6 * * *'
+     - 'windriver-sb07':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-07'
+         frequency: 'deploy'
 
 - project:
     name: heat-staging
@@ -64,11 +78,7 @@
          tenant-name: 'Integration-HEAT-Staging-Daily'
          frequency: 'daily'
          triggers_var:
-          - timed: 'H 7 * * *'
-     - 'windriver-sb07':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-07'
-         frequency: 'deploy'
+          - timed: 'H 8 * * *'
 
 - project:
     name: heat-verify

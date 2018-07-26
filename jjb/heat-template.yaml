@@ -295,7 +295,8 @@
       - archive-logs
 
 - job-template:
-    name: '{env}-heat-daily'
+    triggers_var:
+    name: '{env}-heat-{frequency}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -307,8 +308,7 @@
       - timeout:
           timeout: 300
           fail: true
-    triggers:
-      - timed: 'H 6 * * *'
+    triggers: '{obj:triggers_var}'
     builders:
       - run-heat-ete:
           lab-name: '{lab-name}'

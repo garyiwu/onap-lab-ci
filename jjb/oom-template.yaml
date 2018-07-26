@@ -411,7 +411,8 @@
       - archive-logs
 
 - job-template:
-    name: '{env}-oom-daily'
+    triggers_var:
+    name: '{env}-oom-{frequency}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -423,8 +424,7 @@
       - timeout:
           timeout: 300
           fail: true
-    triggers:
-      - timed: 'H 6 * * *'
+    triggers: '{obj:triggers_var}'
     builders:
       - run-oom-ete:
           lab-name: '{lab-name}'
