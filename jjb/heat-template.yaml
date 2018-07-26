@@ -261,7 +261,7 @@
           rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/instantiate
 
           cd $WORKSPACE/archives
-          rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge healthcheck/output.xml demo-init/output.xml  healthdist/output.xml distribute/output.xml instantiate/output.xml
+          rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge */output.xml
 
           exit 0
 
