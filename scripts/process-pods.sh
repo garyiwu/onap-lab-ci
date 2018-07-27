@@ -16,7 +16,7 @@ TIME=$(date -r $JSON_OUTPUT +%s%N)
 POINTS_FILE=/tmp/points-$JOB-$BUILD-pods.txt
 rm -f $POINTS_FILE
 
-cat onap-pods.json | jq -r  '.items[] | ( (.status.containerStatuses[] | ( " "+.image + " " + (.restartCount | tostring) + " " + (.ready | tostring) ) ) ) + " " + .metadata.name ' | grep -e 'onap/' -e 'openecomp/' | sort | while read CONTAINER; do
+cat $JSON_OUTPUT | jq -r  '.items[] | ( (.status.containerStatuses[] | ( " "+.image + " " + (.restartCount | tostring) + " " + (.ready | tostring) ) ) ) + " " + .metadata.name ' | grep -e 'onap/' -e 'openecomp/' | sort | while read CONTAINER; do
     IMAGE=$(echo $CONTAINER | cut -d ' ' -f 1 | sed -r 's#.*/(onap|openecomp)/##g')
     RESTART_COUNT=$(echo $CONTAINER | cut -d ' ' -f 2)
     READY=$(echo $CONTAINER | cut -d ' ' -f 3)
