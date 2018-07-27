@@ -343,6 +343,8 @@
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/healthcheck
 
           ssh -i $SSH_KEY root@$RANCHER_IP 'kubectl get pods -n onap'
+          ssh -i $SSH_KEY root@$RANCHER_IP "kubectl get pods -n onap -o json" > $WORKSPACE/archives/onap-pods.json
+
           sleep 15m
 
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/demo-k8s.sh onap init"'
@@ -376,9 +378,6 @@
 
           cd $WORKSPACE/archives
           rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge */output.xml
-
-          # retrieve container restart counts
-          ssh -i $SSH_KEY root@$RANCHER_IP "kubectl get pods -n onap -o jsonpath='{{range .items[*].status.containerStatuses[*]}}{{.image}} {{.restartCount}}{{\"\n\"}}'|sort" | tee $WORKSPACE/archives/container-restarts.txt
 
           exit 0
 
@@ -434,6 +433,7 @@
           gerrit_refspec: 'refs/heads/master'
     publishers:
       - integration-robot
+      - pods-influxdb
       - archive-logs
       - trigger-lf-lab-job:
           lab-name: '{lab-name}'
@@ -462,6 +462,7 @@
           gerrit_refspec: 'refs/heads/master'
     publishers:
       - integration-robot
+      - pods-influxdb
       - archive-logs
       - trigger-lf-lab-job:
           lab-name: '{lab-name}'
