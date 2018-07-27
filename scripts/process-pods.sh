@@ -30,7 +30,8 @@ cat $JSON_OUTPUT | jq -r  '.items[] | ( (.status.containerStatuses[] | ( " "+.im
         FAIL=1
     fi
 
-    echo container,image=$IMAGE,pod=$POD restartCount=$RESTART_COUNT,ready=$READY,pass=$PASS,fail=$FAIL $TIME | tee -a $POINTS_FILE
+    # currently assumes that no onap pod contains multiple containers of with the same image
+    echo container,job=$JOB,image=$IMAGE,pod=$POD build=$BUILD,restartCount=$RESTART_COUNT,ready=$READY,pass=$PASS,fail=$FAIL $TIME | tee -a $POINTS_FILE
 done
 
 curl -i $INFLUX_ENDPOINT --data-binary @$POINTS_FILE
