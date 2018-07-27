@@ -30,7 +30,7 @@ cat $JSON_OUTPUT | jq -r  '.items[] | ( (.status.containerStatuses[] | ( " "+.im
         FAIL=1
     fi
 
-    echo container,image=$IMAGE,pod=$POD restartCount=$RESTART_COUNT,ready=$READY,pass=$PASS,fail=$FAIL | tee -a $POINTS_FILE
+    echo container,image=$IMAGE,pod=$POD restartCount=$RESTART_COUNT,ready=$READY,pass=$PASS,fail=$FAIL $TIME | tee -a $POINTS_FILE
 done
 
 curl -i $INFLUX_ENDPOINT --data-binary @$POINTS_FILE
