@@ -16,10 +16,6 @@
          frequency: 'daily'
          triggers_var:
           - timed: 'H 7 * * *'
-     - 'windriver-sb04':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-04'
-         frequency: 'deploy'
 
 - project:
     name: oom-staging
@@ -33,6 +29,12 @@
          frequency: 'daily'
          triggers_var:
           - timed: 'H 8 * * *'
+     - 'windriver-sb04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
+         frequency: 'weekly'
+         triggers_var:
+          - timed: 'H 10 * * 0'
 
 - project:
     name: oom-verify
@@ -62,10 +64,6 @@
          frequency: 'daily'
          triggers_var:
           - timed: 'H 6 * * *'
-     - 'windriver-sb07':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-07'
-         frequency: 'deploy'
 
 - project:
     name: heat-staging
@@ -79,6 +77,12 @@
          frequency: 'daily'
          triggers_var:
           - timed: 'H 8 * * *'
+     - 'windriver-sb07':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-07'
+         frequency: 'weekly'
+         triggers_var:
+          - timed: 'H 9 * * 0'
 
 - project:
     name: heat-verify
