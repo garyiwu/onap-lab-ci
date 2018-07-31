@@ -34,7 +34,7 @@
          tenant-name: 'Integration-SB-04'
          frequency: 'weekly'
          triggers_var:
-          - timed: 'H 10 * * 0'
+          - timed: 'H 10 * * 6'
 
 - project:
     name: oom-verify
@@ -82,7 +82,7 @@
          tenant-name: 'Integration-SB-07'
          frequency: 'weekly'
          triggers_var:
-          - timed: 'H 9 * * 0'
+          - timed: 'H 9 * * 6'
 
 - project:
     name: heat-verify
