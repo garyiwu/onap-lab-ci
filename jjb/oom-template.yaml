@@ -229,7 +229,7 @@
           mkdir -p $WORKSPACE/archives
 
           cd $WORKSPACE/deployment/heat/onap-oom
-          $WORKSPACE/deployment/heat/onap-oom/scripts/deploy.sh ./env/{lab-name}/onap-oom.env
+          $WORKSPACE/deployment/heat/onap-oom/scripts/deploy.sh -q ./env/{lab-name}/onap-oom.env
     publishers:
       - integration-robot
       - archive-logs
@@ -292,7 +292,7 @@
           SO_ENCRYPTION_KEY=aa3871669d893c7fb8abbcda31b88b4f
           export OS_PASSWORD_ENCRYPTED=$(echo -n "$OS_PASSWORD" | openssl aes-128-ecb -e -K "$SO_ENCRYPTION_KEY" -nosalt | xxd -c 256 -p)
 
-          $WORKSPACE/test/ete/scripts/teardown-onap.sh
+          $WORKSPACE/test/ete/scripts/teardown-onap.sh -q
           cd $WORKSPACE/deployment/heat/onap-oom
           envsubst < $ENV_FILE > $ENV_FILE~
           if ! openstack stack create -t ./onap-oom.yaml -e $ENV_FILE~ onap-oom --parameter docker_manifest={docker_manifest} --parameter gerrit_branch={gerrit_branch} --parameter gerrit_refspec={gerrit_refspec}; then
