@@ -36,15 +36,15 @@
          triggers_var:
           - timed: 'H 10 * * 6'
 
-- project:
-    name: oom-verify
-    jobs:
-     - '{env}-oom-verify'
-    env:
-     - 'windriver':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-OOM-Verify'
-         branch: 'master'
+#- project:
+#    name: oom-verify
+#    jobs:
+#     - '{env}-oom-verify'
+#    env:
+#     - 'windriver':
+#         lab-name: 'windriver'
+#         tenant-name: 'Integration-OOM-Verify'
+#         branch: 'master'
 
 - project:
     name: heat-release
@@ -84,13 +84,13 @@
          triggers_var:
           - timed: 'H 9 * * 6'
 
-- project:
-    name: heat-verify
-    jobs:
-     - '{env}-heat-verify'
-    env:
-     - 'windriver':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-HEAT-Verify'
-         branch: 'master'
+#- project:
+#    name: heat-verify
+#    jobs:
+#     - '{env}-heat-verify'
+#    env:
+#     - 'windriver':
+#         lab-name: 'windriver'
+#         tenant-name: 'Integration-HEAT-Verify'
+#         branch: 'master'
 
