@@ -26,7 +26,7 @@
       - robot:
           output-path: 'archives'
           other-files: ''
-          unstable-threshold: 75
+          unstable-threshold: 60
           pass-threshold: 100
           only-critical: false
       - postbuildscript:
@@ -125,7 +125,7 @@
 
           set -v
           CRUMB=$(curl -s -u "$LF_USERNAME:$LF_PASSWORD" 'https://jenkins.onap.org/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
-          curl -s -u "$LF_USERNAME:$LF_PASSWORD" -H "$CRUMB" -X POST "https://jenkins.onap.org/job/lab-$JOB_NAME/buildWithParameters?SRC_BUILD_URL=$BUILD_URL&LOG_DIR_URL=http://12.234.32.117/logs/$JOB_NAME/$BUILD_NUMBER/"
+          curl -s -u "$LF_USERNAME:$LF_PASSWORD" -H "$CRUMB" -X POST "https://jenkins.onap.org/job/lab-$JOB_NAME/buildWithParameters?SRC_BUILD_URL=$BUILD_URL&LOG_DIR_URL=http://onapci.org/logs/$JOB_NAME/$BUILD_NUMBER/"
 
 - trigger:
     name: gerrit-trigger-patch-submitted
