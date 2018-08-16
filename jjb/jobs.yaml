@@ -9,13 +9,13 @@
          tenant-name: 'ETE-OOM-Test'
          frequency: 'daily'
          triggers_var:
-          - timed: 'H 7 * * *'
+          - timed: 'H 4 * * *'
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Daily'
          frequency: 'daily'
          triggers_var:
-          - timed: 'H 7 * * *'
+          - timed: 'H 4 * * *'
 
 - project:
     name: oom-staging
@@ -28,13 +28,13 @@
          tenant-name: 'Integration-OOM-Staging-Daily'
          frequency: 'daily'
          triggers_var:
-          - timed: 'H 8 * * *'
+          - timed: 'H 4 * * *'
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
          frequency: 'weekly'
          triggers_var:
-          - timed: 'H 10 * * 6'
+          - timed: 'H 7 * * 6'
 
 #- project:
 #    name: oom-verify
@@ -57,13 +57,13 @@
          tenant-name: 'ETE-HEAT-Test'
          frequency: 'daily'
          triggers_var:
-          - timed: 'H 6 * * *'
+          - timed: 'H 4 * * *'
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-HEAT-Daily'
          frequency: 'daily'
          triggers_var:
-          - timed: 'H 6 * * *'
+          - timed: 'H 4 * * *'
 
 - project:
     name: heat-staging
@@ -76,13 +76,13 @@
          tenant-name: 'Integration-HEAT-Staging-Daily'
          frequency: 'daily'
          triggers_var:
-          - timed: 'H 8 * * *'
+          - timed: 'H 4 * * *'
      - 'windriver-sb07':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-07'
          frequency: 'weekly'
          triggers_var:
-          - timed: 'H 9 * * 6'
+          - timed: 'H 7 * * 6'
 
 #- project:
 #    name: heat-verify
