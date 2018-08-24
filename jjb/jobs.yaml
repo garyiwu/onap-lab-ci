@@ -35,6 +35,10 @@
          frequency: 'weekly'
          triggers_var:
           - timed: 'H 7 * * 6'
+     - 'windriver-sb02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+         frequency: 'manual'
 
 #- project:
 #    name: oom-verify
