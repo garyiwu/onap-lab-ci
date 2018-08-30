@@ -4,12 +4,6 @@
      - '{env}-oom-{frequency}'
     branch: 'master'
     env:
-     - 'tlab':
-         lab-name: 'tlab'
-         tenant-name: 'ETE-OOM-Test'
-         frequency: 'daily'
-         triggers_var:
-          - timed: 'H 4 * * *'
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Daily'
@@ -26,6 +20,12 @@
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Staging-Daily'
+         frequency: 'daily'
+         triggers_var:
+          - timed: 'H 4 * * *'
+     - 'tlab':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-OOM-Test'
          frequency: 'daily'
          triggers_var:
           - timed: 'H 4 * * *'
@@ -56,12 +56,6 @@
      - '{env}-heat-{frequency}'
     branch: 'master'
     env:
-     - 'tlab':
-         lab-name: 'tlab'
-         tenant-name: 'ETE-HEAT-Test'
-         frequency: 'daily'
-         triggers_var:
-          - timed: 'H 4 * * *'
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-HEAT-Daily'
@@ -78,6 +72,12 @@
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-HEAT-Staging-Daily'
+         frequency: 'daily'
+         triggers_var:
+          - timed: 'H 4 * * *'
+     - 'tlab':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-HEAT-Test'
          frequency: 'daily'
          triggers_var:
           - timed: 'H 4 * * *'
