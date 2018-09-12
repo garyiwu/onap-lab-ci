@@ -281,7 +281,7 @@
     wrappers:
       - timestamps
       - timeout:
-          timeout: 300
+          timeout: 360
           fail: true
     builders:
       - run-heat-ete:
@@ -306,7 +306,7 @@
     wrappers:
       - timestamps
       - timeout:
-          timeout: 300
+          timeout: 360
           fail: true
     triggers: '{obj:triggers_var}'
     builders:
@@ -334,7 +334,7 @@
     wrappers:
       - timestamps
       - timeout:
-          timeout: 300
+          timeout: 360
           fail: true
     triggers: '{obj:triggers_var}'
     builders:
