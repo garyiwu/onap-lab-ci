@@ -215,16 +215,13 @@
 
           sleep 15m
 
-          RESULT=0
           for n in $(seq 1 10); do
             echo "Wait count $n of 10"
-            sleep $RESULT'm'
+            sleep 15m
             $WORKSPACE/test/ete/scripts/run-healthcheck.sh
             RESULT=$?
             if [ $RESULT -eq 0 ]; then
               break
-            elif [ $RESULT -gt 15 ]; then
-              RESULT=15
             fi
           done
           LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep health | head -1")
