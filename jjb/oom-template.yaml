@@ -400,7 +400,7 @@
     wrappers:
       - timestamps
       - timeout:
-          timeout: 360
+          timeout: 720
           fail: true
     builders:
       - run-oom-ete:
@@ -425,7 +425,7 @@
     wrappers:
       - timestamps
       - timeout:
-          timeout: 360
+          timeout: 720
           fail: true
     triggers: '{obj:triggers_var}'
     builders:
@@ -454,7 +454,7 @@
     wrappers:
       - timestamps
       - timeout:
-          timeout: 360
+          timeout: 720
           fail: true
     triggers: '{obj:triggers_var}'
     builders:
