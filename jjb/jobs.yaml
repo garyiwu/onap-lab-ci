@@ -8,6 +8,7 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Daily'
          frequency: 'daily'
+         disabled_var: false
          triggers_var:
           - timed: 'H 4 * * *'
 
@@ -21,18 +22,21 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Staging-Daily'
          frequency: 'daily'
+         disabled_var: false
          triggers_var:
           - timed: 'H 4 * * *'
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-OOM-Test'
          frequency: 'daily'
+         disabled_var: false
          triggers_var:
           - timed: 'H 4 * * *'
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
          frequency: 'weekly'
+         disabled_var: true
          triggers_var:
           - timed: 'H 7 * * 6'
      - 'windriver-sb02':
@@ -60,6 +64,7 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-HEAT-Daily'
          frequency: 'daily'
+         disabled_var: true
          triggers_var:
           - timed: 'H 4 * * *'
 
@@ -73,18 +78,21 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-HEAT-Staging-Daily'
          frequency: 'daily'
+         disabled_var: true
          triggers_var:
           - timed: 'H 4 * * *'
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
          frequency: 'daily'
+         disabled_var: false
          triggers_var:
           - timed: 'H 4 * * *'
      - 'windriver-sb07':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-07'
          frequency: 'weekly'
+         disabled_var: true
          triggers_var:
           - timed: 'H 7 * * 6'
 

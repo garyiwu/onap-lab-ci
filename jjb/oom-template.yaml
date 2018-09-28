@@ -413,8 +413,10 @@
       - archive-logs
 
 - job-template:
+    disabled_var:
     triggers_var:
     name: '{env}-oom-{frequency}'
+    disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -442,8 +444,10 @@
           lab-name: '{lab-name}'
 
 - job-template:
+    disabled_var:
     triggers_var:
     name: '{env}-oom-staging-{frequency}'
+    disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''

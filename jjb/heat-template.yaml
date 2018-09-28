@@ -298,8 +298,10 @@
       - archive-logs
 
 - job-template:
+    disabled_var:
     triggers_var:
     name: '{env}-heat-{frequency}'
+    disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -326,8 +328,10 @@
           lab-name: '{lab-name}'
 
 - job-template:
+    disabled_var:
     triggers_var:
     name: '{env}-heat-staging-{frequency}'
+    disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
