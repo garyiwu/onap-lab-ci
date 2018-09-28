@@ -215,7 +215,7 @@
 
           sleep 15m
 
-          for n in $(seq 1 10); do
+          for n in $(seq 1 6); do
             echo "Wait count $n of 10"
             sleep 15m
             $WORKSPACE/test/ete/scripts/run-healthcheck.sh
@@ -239,12 +239,6 @@
           mkdir -p $WORKSPACE/archives/demo-init
           rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/demo-init
 
-          ssh -i $SSH_KEY root@$ROBOT_IP "/opt/ete.sh portal"
-          LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep portal | head -1")
-          echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
-          mkdir -p $WORKSPACE/archives/portal
-          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/portal
-
           ssh -i $SSH_KEY root@$ROBOT_IP "/opt/ete.sh healthdist"
           LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep healthdist | head -1")
           echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
@@ -262,6 +256,12 @@
           echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
           mkdir -p $WORKSPACE/archives/instantiate
           rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/instantiate
+
+          ssh -i $SSH_KEY root@$ROBOT_IP "/opt/ete.sh portal"
+          LOG_DIR=$(ssh -i $SSH_KEY root@$ROBOT_IP "ls -1t /opt/eteshare/logs | grep portal | head -1")
+          echo "Browse Robot results at http://$ROBOT_IP:88/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/portal
+          rsync -e "ssh -i $SSH_KEY" -avz root@$ROBOT_IP:/opt/eteshare/logs/$LOG_DIR/ $WORKSPACE/archives/portal
 
           cd $WORKSPACE/archives
           rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge */output.xml
