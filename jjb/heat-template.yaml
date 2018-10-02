@@ -215,8 +215,8 @@
 
           sleep 15m
 
-          for n in $(seq 1 6); do
-            echo "Wait count $n of 10"
+          for n in $(seq 1 8); do
+            echo "Wait count $n of 8"
             sleep 15m
             $WORKSPACE/test/ete/scripts/run-healthcheck.sh
             RESULT=$?
