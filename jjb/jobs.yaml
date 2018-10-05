@@ -11,6 +11,10 @@
          disabled_var: false
          triggers_var:
           - timed: 'H 4 * * *'
+     - 'windriver-sb02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+         frequency: 'manual'
 
 - project:
     name: oom-staging
