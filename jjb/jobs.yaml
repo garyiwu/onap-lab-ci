@@ -35,7 +35,7 @@
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 4 * * *'
+          - timed: 'H 21 * * *'
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
@@ -91,7 +91,7 @@
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 4 * * *'
+          - timed: 'H 21 * * *'
      - 'windriver-sb07':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-07'
