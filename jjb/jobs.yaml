@@ -15,6 +15,13 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
          frequency: 'manual'
+     - 'tlab':
+         lab-name: 'tlab'
+         tenant-name: 'ETE-HEAT-Test'
+         frequency: 'daily'
+         disabled_var: false
+         triggers_var:
+          - timed: 'H 21 * * *'
 
 - project:
     name: oom-staging
@@ -89,7 +96,7 @@
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
          frequency: 'daily'
-         disabled_var: false
+         disabled_var: true
          triggers_var:
           - timed: 'H 21 * * *'
      - 'windriver-sb07':
