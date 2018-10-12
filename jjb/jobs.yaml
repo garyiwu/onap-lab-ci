@@ -54,6 +54,10 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
          frequency: 'manual'
+     - 'windriver-sb05':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-05'
+         frequency: 'manual'
 
 #- project:
 #    name: oom-verify
