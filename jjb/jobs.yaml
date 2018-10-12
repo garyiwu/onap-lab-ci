@@ -58,7 +58,7 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-05'
          frequency: 'manual'
-     - 'tlab':
+     - 'tlab-onap5g':
          lab-name: 'tlab'
          tenant-name: 'ONAP-5G'
          frequency: 'manual'
