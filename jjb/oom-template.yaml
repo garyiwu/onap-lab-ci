@@ -305,6 +305,7 @@
           STATUS=$(openstack stack show -c stack_status -f value onap-oom)
           echo $STATUS
           if [ "CREATE_COMPLETE" != "$STATUS" ]; then
+            openstack stack show -c stack_status_reason -f value onap-oom
             exit 1
           fi
 
