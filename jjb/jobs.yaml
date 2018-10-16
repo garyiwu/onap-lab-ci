@@ -11,6 +11,10 @@
          disabled_var: false
          triggers_var:
           - timed: 'H 4 * * *'
+     - 'windriver-sb01':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-01'
+         frequency: 'manual'
      - 'windriver-sb02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
