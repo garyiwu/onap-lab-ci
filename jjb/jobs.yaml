@@ -39,14 +39,14 @@
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 4 * * *'
+          - timed: 'H 5 * * *'
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-OOM-Test'
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 21 * * *'
+          - timed: 'H 22 * * *'
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
@@ -103,14 +103,14 @@
          frequency: 'daily'
          disabled_var: true
          triggers_var:
-          - timed: 'H 4 * * *'
+          - timed: 'H 5 * * *'
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
          frequency: 'daily'
          disabled_var: true
          triggers_var:
-          - timed: 'H 21 * * *'
+          - timed: 'H 22 * * *'
      - 'windriver-sb07':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-07'
