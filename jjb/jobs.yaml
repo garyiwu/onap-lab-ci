@@ -30,6 +30,13 @@
          lab-name: 'tlab'
          tenant-name: 'ONAP-5G'
          frequency: 'manual'
+     - 'windriver-sb04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
+         frequency: 'weekly'
+         disabled_var: true
+         triggers_var:
+          - timed: 'H 7 * * 6'
 
 - project:
     name: oom-staging
