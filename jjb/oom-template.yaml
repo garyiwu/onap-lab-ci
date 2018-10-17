@@ -319,10 +319,19 @@
           ssh-keygen -R $RANCHER_IP
 
           ssh -o StrictHostKeychecking=no -i $SSH_KEY ubuntu@$RANCHER_IP "sed -u '/Cloud-init.*finished/q' <(tail -n+0 -f /var/log/cloud-init-output.log)"
-          sleep 30m
+          sleep 45m
 
-          for n in $(seq 1 8); do
-            echo "Wait count $n of 8"
+          for n in $(seq 1 10); do
+            echo "Wait for ROBOT count $n of 10"
+            sleep 5m
+            ROBOT_POD=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl --namespace onap get pods"' | grep robot | sed 's/ .*//')
+            if [ ! -z "$ROBOT_POD" ]; then
+              break
+            fi
+          done
+
+          for n in $(seq 1 10); do
+            echo "Wait for HEALTHCHECK count $n of 10"
             sleep 15m
             ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap health"'
             RESULT=$?

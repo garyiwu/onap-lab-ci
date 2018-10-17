@@ -26,6 +26,10 @@
          disabled_var: false
          triggers_var:
           - timed: 'H 21 * * *'
+     - 'tlab-onap5g':
+         lab-name: 'tlab'
+         tenant-name: 'ONAP-5G'
+         frequency: 'manual'
 
 - project:
     name: oom-staging
@@ -61,10 +65,6 @@
      - 'windriver-sb05':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-05'
-         frequency: 'manual'
-     - 'tlab-onap5g':
-         lab-name: 'tlab'
-         tenant-name: 'ONAP-5G'
          frequency: 'manual'
 
 #- project:
