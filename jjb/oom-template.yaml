@@ -427,6 +427,7 @@
     disabled_var:
     triggers_var:
     name: '{env}-oom-{frequency}'
+    description: 'OOM Release deployment to {lab-name} {tenant-name}'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
@@ -458,6 +459,7 @@
     disabled_var:
     triggers_var:
     name: '{env}-oom-staging-{frequency}'
+    description: 'OOM Staging deployment to {lab-name} {tenant-name}'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''

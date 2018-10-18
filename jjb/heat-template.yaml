@@ -301,6 +301,7 @@
     disabled_var:
     triggers_var:
     name: '{env}-heat-{frequency}'
+    description: 'HEAT Release deployment to {lab-name} {tenant-name}'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
@@ -331,6 +332,7 @@
     disabled_var:
     triggers_var:
     name: '{env}-heat-staging-{frequency}'
+    description: 'HEAT Staging deployment to {lab-name} {tenant-name}'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
