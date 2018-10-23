@@ -30,6 +30,7 @@
          lab-name: 'tlab'
          tenant-name: 'ONAP-5G'
          frequency: 'manual'
+         disabled_var: true
 
 - project:
     name: oom-staging
@@ -65,6 +66,7 @@
      - 'windriver-sb05':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-05'
+         disabled_var: true
          frequency: 'manual'
 
 #- project:
