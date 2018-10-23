@@ -329,19 +329,14 @@
             PREV_RESULT=$RESULT
           done
 
-          for n in $(seq 1 10); do
-            echo "Wait for ROBOT count $n of 10"
-            sleep 5m
-            ROBOT_POD=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl --namespace onap get pods"' | grep robot | sed 's/ .*//')
-            if [ ! -z "$ROBOT_POD" ]; then
-              break
-            fi
-          done
+          #workaround to restart ueb
+          UEB_POD=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl --namespace onap get pods"' | grep sdnc-ueb | sed 's/ .*//')
+          echo "kubectl delete pod -n onap $UEB_POD" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
 
           PREV_RESULT=0
-          for n in $(seq 1 30); do
+          for n in $(seq 1 20); do
             echo "Wait for HEALTHCHECK count $n of 10"
-            sleep 5m
+            sleep 10m
             ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap health"'
             RESULT=$?
             if [ $RESULT -eq 0 ] || [ $RESULT -eq $PREV_RESULT ]; then
