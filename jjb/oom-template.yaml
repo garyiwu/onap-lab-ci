@@ -298,7 +298,7 @@
           if ! openstack stack create -t ./onap-oom.yaml -e $ENV_FILE~ {env-name} --parameter docker_manifest={docker_manifest} --parameter integration_gerrit_branch={gerrit_branch} --parameter integration_gerrit_refspec={gerrit_refspec}; then
             exit 1
           fi
-          while [ "CREATE_IN_PROGRESS" == "$(openstack stack show -c stack_status -f value {env-name}" ]; do
+          while [ "CREATE_IN_PROGRESS" == "$(openstack stack show -c stack_status -f value {env-name})" ]; do
             sleep 30
           done
 
