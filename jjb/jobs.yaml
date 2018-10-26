@@ -7,6 +7,7 @@
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Daily'
+         stack-name: 'release'
          frequency: 'daily'
          disabled_var: false
          triggers_var:
@@ -14,14 +15,17 @@
      - 'windriver-sb00':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-00'
+         stack-name: 'sb00'
          frequency: 'manual'
      - 'windriver-sb01':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
+         stack-name: 'sb01'
          frequency: 'manual'
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
+         stack-name: 'release'
          frequency: 'daily'
          disabled_var: false
          triggers_var:
@@ -29,6 +33,7 @@
      - 'tlab-onap5g':
          lab-name: 'tlab'
          tenant-name: 'ONAP-5G'
+         stack-name: 'onap5g'
          frequency: 'manual'
          disabled_var: true
 
@@ -41,6 +46,7 @@
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Staging-Daily'
+         stack-name: 'staging'
          frequency: 'daily'
          disabled_var: false
          triggers_var:
@@ -48,6 +54,7 @@
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-OOM-Test'
+         stack-name: 'staging'
          frequency: 'daily'
          disabled_var: false
          triggers_var:
@@ -55,6 +62,7 @@
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
+         stack-name: 'sb04'
          frequency: 'weekly'
          disabled_var: true
          triggers_var:
@@ -62,10 +70,12 @@
      - 'windriver-sb02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
+         stack-name: 'sb02'
          frequency: 'manual'
      - 'windriver-sb05':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-05'
+         stack-name: 'sb05'
          disabled_var: true
          frequency: 'manual'
 
