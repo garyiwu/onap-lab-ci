@@ -321,7 +321,7 @@
           ssh -o StrictHostKeychecking=no -i $SSH_KEY ubuntu@$RANCHER_IP "sed -u '/Cloud-init.*finished/q' <(tail -n+0 -f /var/log/cloud-init-output.log)"
           PREV_RESULT=0
           for n in $(seq 1 10); do
-            sleep 5m
+            sleep 7m
             RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep -v 1/1 | grep -v 2/2 | wc -l)
             if [[ $? -eq 0 && ( $RESULT -eq 0 || $RESULT -eq $PREV_RESULT ) ]]; then
               break
@@ -339,7 +339,7 @@
             fi
             ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap health"'
             RESULT=$?
-            if [ $RESULT -eq 0 ] || [ $RESULT -eq $PREV_RESULT ]; then
+            if [[ $RESULT -lt 10 && ( $RESULT -eq 0 || $RESULT -eq $PREV_RESULT ) ]]; then
               break
             fi
             PREV_RESULT=$RESULT
