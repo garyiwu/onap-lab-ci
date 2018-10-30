@@ -78,6 +78,12 @@
          stack-name: 'sb05'
          disabled_var: true
          frequency: 'manual'
+     - 'tlab-onap5g':
+         lab-name: 'tlab'
+         tenant-name: 'ONAP-5G'
+         stack-name: 'onap5g'
+         frequency: 'manual'
+         disabled_var: true
 
 #- project:
 #    name: oom-verify
