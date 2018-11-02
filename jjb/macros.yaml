@@ -83,6 +83,9 @@
           curl -s -f "http://localhost:8080/jenkins/job/$JOB_NAME/$BUILD_NUMBER/consoleText" > $WORKSPACE/archives/console.log
           curl -s -f "http://localhost:8080/jenkins/job/$JOB_NAME/$BUILD_NUMBER/timestamps/?time=HH:mm:ssZ&appendLog" >  $WORKSPACE/archives/console-source-timestamp.log
           rsync -avtz $WORKSPACE/archives/ huawei@10.145.122.118:/var/www/html/logs/$JOB_NAME/$BUILD_NUMBER
+          echo
+          echo "Browse logs at http://onapci.org/logs/$JOB_NAME/$BUILD_NUMBER/"
+          echo
 
 - builder:
     name: robot-influxdb
@@ -121,6 +124,12 @@
       - shell: |
           #!/bin/bash
           set +x
+          LF_JOBS="tlab-oom-daily tlab-oom-staging-daily windriver-oom-daily windriver-oom-staging-daily"
+          echo $LF_JOBS | grep -q $JOB_NAME
+          if [ $? -ne 0 ]; then
+            exit 0
+          fi
+
           . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
 
           set -v

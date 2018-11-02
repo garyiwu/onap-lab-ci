@@ -391,7 +391,7 @@
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/portal
 
           cd $WORKSPACE/archives
-          rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge */output.xml
+          rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge $(ls -rt */output.xml)
 
           exit 0
 
