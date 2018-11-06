@@ -292,16 +292,15 @@
           SO_ENCRYPTION_KEY=aa3871669d893c7fb8abbcda31b88b4f
           export OS_PASSWORD_ENCRYPTED=$(echo -n "$OS_PASSWORD" | openssl aes-128-ecb -e -K "$SO_ENCRYPTION_KEY" -nosalt | xxd -c 256 -p)
 
-          # $WORKSPACE/test/ete/scripts/teardown-onap.sh -q
+          $WORKSPACE/test/ete/scripts/teardown-onap.sh -q
+
+          STACK_NAME="{stack-name}"
+
           # temporary workaround to handle undeletable stacks
-          STACKS=$(openstack stack list -c "Stack Name" -f value)
-          if [ ! -z "$STACKS" ]; then
-            openstack stack delete -y $STACKS
-          else
-            echo "No existing stacks to delete."
+          if [ ! -z "$(openstack stack show -c stack_status -f value $STACK_NAME)" ]; then
+            STACK_NAME="{stack-name}-$RANDOM"
           fi
 
-          STACK_NAME="{stack-name}$(date +%d)"
           cd $WORKSPACE/deployment/heat/onap-oom
           envsubst < $ENV_FILE > $ENV_FILE~
           if ! openstack stack create -t ./onap-oom.yaml -e $ENV_FILE~ $STACK_NAME --parameter docker_manifest={docker_manifest} --parameter integration_gerrit_branch={gerrit_branch} --parameter integration_gerrit_refspec={gerrit_refspec}; then
