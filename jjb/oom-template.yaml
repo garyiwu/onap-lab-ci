@@ -314,7 +314,7 @@
           STATUS=$(openstack stack show -c stack_status -f value $STACK_NAME)
           echo $STATUS
           if [ "CREATE_COMPLETE" != "$STATUS" ]; then
-            openstack stack show -c stack_status_reason -f value $STACK_NAME}
+            openstack stack show -c stack_status_reason -f value $STACK_NAME
             exit 1
           fi
 
