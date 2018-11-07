@@ -72,6 +72,11 @@
          tenant-name: 'Integration-SB-02'
          stack-name: 'sb02'
          frequency: 'manual'
+     - 'windriver-sb03':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-03'
+         stack-name: 'sb03'
+         frequency: 'manual'
      - 'windriver-sb05':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-05'
