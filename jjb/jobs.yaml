@@ -90,6 +90,17 @@
          frequency: 'manual'
          disabled_var: true
 
+- project:
+    name: oom-stability72
+    jobs:
+     - '{env}-oom-stability72hr'
+    branch: 'master'
+    env:
+     - 'windriver-sb03':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-03'
+         stack-name: 'sb03'
+
 #- project:
 #    name: oom-verify
 #    jobs:

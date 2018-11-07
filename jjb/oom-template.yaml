@@ -179,8 +179,9 @@
           mkdir -p $WORKSPACE/archives
 
           SSH_KEY=~/.ssh/onap_key
-          RANCHER_IP=$(openstack stack output show onap-oom rancher_vm_ip -c output_value -f value)
-          K8S_IP=$(openstack stack output show onap-oom k8s_1_vm_ip -c output_value -f value)
+          STACK_NAME="{stack-name}"
+          RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
+          K8S_IP=$(openstack stack output show $STACK_NAME k8s_1_vm_ip -c output_value -f value)
           ssh-keygen -R $RANCHER_IP
 
           ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
