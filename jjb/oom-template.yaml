@@ -334,7 +334,7 @@
             if [[ $? -eq 0 && ( $RESULT -eq 0 || $RESULT -eq $PREV_RESULT ) ]]; then
               break
             fi
-            sleep 15m
+            sleep 20m
             PREV_RESULT=$RESULT
           done
 
@@ -347,7 +347,7 @@
             if [[ $RESULT -lt 10 && ( $RESULT -eq 0 || $RESULT -eq $PREV_RESULT ) ]]; then
               break
             fi
-            sleep 15m
+            sleep 20m
             PREV_RESULT=$RESULT
           done
           if [ "$ROBOT_POD" == "" ]; then
