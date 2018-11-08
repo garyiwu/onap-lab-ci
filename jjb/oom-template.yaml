@@ -405,7 +405,7 @@
 
           # push sample vFWCL policies
           PAP_POD=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl --namespace onap get pods"' | grep policy-pap | sed 's/ .*//')
-          echo "kubectl exec -it $PAP_POD -n onap -c pap -- bash -c 'export PRELOAD_POLICIES=true; /tmp/policy-install/config/push-policies.sh'"
+          echo "kubectl exec -it $PAP_POD -n onap -c pap -- bash -c 'export PRELOAD_POLICIES=true; /tmp/policy-install/config/push-policies.sh'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
 
           # ete instantiateDemoVFWCL
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap instantiateDemoVFWCL"'
