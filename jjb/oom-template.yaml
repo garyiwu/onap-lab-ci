@@ -49,7 +49,7 @@
 
           SSH_KEY=~/.ssh/onap_key
           RANCHER_IP=$(openstack stack output show onap-oom rancher_vm_ip -c output_value -f value)
-          K8S_IP=$(openstack stack output show onap-oom k8s_1_vm_ip -c output_value -f value)
+          K8S_IP=$(openstack stack output show onap-oom k8s_01_vm_ip -c output_value -f value)
           ssh-keygen -R $RANCHER_IP
 
           ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
@@ -116,7 +116,7 @@
 
           SSH_KEY=~/.ssh/onap_key
           RANCHER_IP=$(openstack stack output show onap-oom rancher_vm_ip -c output_value -f value)
-          K8S_IP=$(openstack stack output show onap-oom k8s_1_vm_ip -c output_value -f value)
+          K8S_IP=$(openstack stack output show onap-oom k8s_01_vm_ip -c output_value -f value)
           ssh-keygen -R $RANCHER_IP
 
           ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
@@ -181,7 +181,7 @@
           SSH_KEY=~/.ssh/onap_key
           STACK_NAME="{stack-name}"
           RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
-          K8S_IP=$(openstack stack output show $STACK_NAME k8s_1_vm_ip -c output_value -f value)
+          K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
           ssh-keygen -R $RANCHER_IP
 
           ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
@@ -251,7 +251,7 @@
 
           SSH_KEY=~/.ssh/onap_key
           RANCHER_IP=$(openstack stack output show onap-oom rancher_vm_ip -c output_value -f value)
-          K8S_IP=$(openstack stack output show onap-oom k8s_1_vm_ip -c output_value -f value)
+          K8S_IP=$(openstack stack output show onap-oom k8s_01_vm_ip -c output_value -f value)
           ssh-keygen -R $RANCHER_IP
 
           ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
@@ -293,9 +293,10 @@
           SO_ENCRYPTION_KEY=aa3871669d893c7fb8abbcda31b88b4f
           export OS_PASSWORD_ENCRYPTED=$(echo -n "$OS_PASSWORD" | openssl aes-128-ecb -e -K "$SO_ENCRYPTION_KEY" -nosalt | xxd -c 256 -p)
 
-          $WORKSPACE/test/ete/scripts/teardown-onap.sh -q
-
           STACK_NAME="{stack-name}"
+
+
+          $WORKSPACE/test/ete/scripts/teardown-onap.sh -q
 
           # temporary workaround to handle undeletable stacks
           if [ ! -z "$(openstack stack show -c stack_status -f value $STACK_NAME)" ]; then
@@ -321,7 +322,7 @@
           for i in $(seq 1 30); do
             sleep 30
             RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
-            K8S_IP=$(openstack stack output show $STACK_NAME k8s_1_vm_ip -c output_value -f value)
+            K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
             timeout 1 ping -c 1 "$RANCHER_IP" && break
           done
           sleep 2m
