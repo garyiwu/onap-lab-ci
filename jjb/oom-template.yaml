@@ -264,7 +264,7 @@
           fi
 
           PNG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vPKG | head -1)
-          PUBLIC_NET_ID=$(openstack stack show sb02 -f json | jq -r '.parameters.public_net_id')
+          PUBLIC_NET_ID=$(openstack stack show $STACK_NAME -f json | jq -r '.parameters.public_net_id')
           PUBLIC_NET_NAME=$(openstack network show $PUBLIC_NET_ID -f value -c name)
           PNG_IP=$(openstack stack resource show $PNG_STACK vpg_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
 
@@ -490,6 +490,26 @@
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
           mkdir -p $WORKSPACE/archives/instantiateDemoVFWCL
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/instantiateDemoVFWCL
+
+          # restart drools
+          echo "kubectl exec -it dev-policy-drools-0 -- bash -c 'source /opt/app/policy/etc/profile.d/env.sh; policy stop'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "kubectl exec -it dev-policy-drools-0 -- bash -c 'source /opt/app/policy/etc/profile.d/env.sh; policy start'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+
+          # wait for policy to kick in
+          sleep 20m
+
+          # demo vfwclosedloop
+          PNG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vPKG | head -1)
+          PUBLIC_NET_ID=$(openstack stack show $STACK_NAME -f json | jq -r '.parameters.public_net_id')
+          PUBLIC_NET_NAME=$(openstack network show $PUBLIC_NET_ID -f value -c name)
+          PNG_IP=$(openstack stack resource show $PNG_STACK vpg_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
+          echo "/root/oom/kubernetes/robot/demo-k8s.sh onap vfwclosedloop $PNG_IP" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep vfwclosedloop | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
+          mkdir -p $WORKSPACE/archives/vfwclosedloop
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/vfwclosedloop
+
 
           cd $WORKSPACE/archives
           rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge $(ls -rt */output.xml)
