@@ -101,7 +101,6 @@
          tenant-name: 'Integration-SB-02'
          stack-name: 'sb02'
          disabled_var: true
-    env:
      - 'windriver-sb03':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-03'
