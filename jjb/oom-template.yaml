@@ -149,7 +149,9 @@
       - archive-logs
 
 - job-template:
+    disabled_var:
     name: '{env}-oom-stability72hr'
+    disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -166,6 +168,7 @@
             - "{env}-oom-deploy"
             - "{env}-oom-healthcheck"
             - "{env}-oom-instantiate"
+            - "{env}-oom-staging-manual"
     builders:
       - shell: |
           #!/bin/bash
