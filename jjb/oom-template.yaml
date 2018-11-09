@@ -187,6 +187,9 @@
           K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
           ssh-keygen -R $RANCHER_IP
 
+          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "kubectl get pods -n onap | grep -vE 'Running|Completed|Error'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+
           ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
           if [ "$ROBOT_POD" == "" ]; then
             exit 1
@@ -202,6 +205,9 @@
 
           echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+
+          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "kubectl get pods -n onap | grep -vE 'Running|Completed|Error'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
 
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
