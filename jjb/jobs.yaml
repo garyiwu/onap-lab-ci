@@ -50,7 +50,7 @@
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 5 * * *'
+          - timed: 'H 6 * * *'
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-OOM-Test'
@@ -58,7 +58,7 @@
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 22 * * *'
+          - timed: 'H 23 * * *'
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
