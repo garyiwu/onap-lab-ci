@@ -11,7 +11,7 @@
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 4 * * *'
+          - timed: 'H 3 * * *'
      - 'windriver-sb00':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-00'
@@ -29,7 +29,7 @@
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 21 * * *'
+          - timed: 'H 20 * * *'
      - 'tlab-onap5g':
          lab-name: 'tlab'
          tenant-name: 'ONAP-5G'
