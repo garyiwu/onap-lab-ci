@@ -492,8 +492,8 @@
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/instantiateDemoVFWCL
 
           # restart drools
-          timeout 30 echo "kubectl exec dev-policy-drools-0 -- bash -c 'source /opt/app/policy/etc/profile.d/env.sh; policy stop'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          timeout 30 echo "kubectl exec dev-policy-drools-0 -- bash -c 'source /opt/app/policy/etc/profile.d/env.sh; policy start'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          timeout 3m echo "kubectl exec dev-policy-drools-0 -- bash -c 'source /opt/app/policy/etc/profile.d/env.sh; policy stop'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          timeout 3m echo "kubectl exec dev-policy-drools-0 -- bash -c 'source /opt/app/policy/etc/profile.d/env.sh; policy start'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
 
           # wait for policy to kick in
           sleep 20m
