@@ -22,6 +22,14 @@
          tenant-name: 'Integration-SB-01'
          stack-name: 'sb01'
          frequency: 'manual'
+     - 'windriver-sb04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
+         stack-name: 'sb04'
+         frequency: 'weekly'
+         disabled_var: true
+         triggers_var:
+          - timed: 'H 7 * * 6'
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
@@ -59,14 +67,6 @@
          disabled_var: false
          triggers_var:
           - timed: 'H 23 * * *'
-     - 'windriver-sb04':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-04'
-         stack-name: 'sb04'
-         frequency: 'weekly'
-         disabled_var: true
-         triggers_var:
-          - timed: 'H 7 * * 6'
      - 'windriver-sb02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
