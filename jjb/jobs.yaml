@@ -27,9 +27,7 @@
          tenant-name: 'Integration-SB-04'
          stack-name: 'sb04'
          frequency: 'weekly'
-         disabled_var: true
-         triggers_var:
-          - timed: 'H 7 * * 6'
+         frequency: 'manual'
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
