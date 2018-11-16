@@ -129,47 +129,47 @@
 #         tenant-name: 'Integration-OOM-Verify'
 #         branch: 'master'
 
-- project:
-    name: heat-release
-    jobs:
-     - '{env}-heat-{frequency}'
-    branch: 'master'
-    env:
-     - 'windriver':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-HEAT-Daily'
-         frequency: 'daily'
-         disabled_var: true
-         triggers_var:
-          - timed: 'H 4 * * *'
+#- project:
+#    name: heat-release
+#    jobs:
+#     - '{env}-heat-{frequency}'
+#    branch: 'master'
+#    env:
+#     - 'windriver':
+#         lab-name: 'windriver'
+#         tenant-name: 'Integration-HEAT-Daily'
+#         frequency: 'daily'
+#         disabled_var: true
+#         triggers_var:
+#          - timed: 'H 4 * * *'
 
-- project:
-    name: heat-staging
-    jobs:
-     - '{env}-heat-staging-{frequency}'
-    branch: 'master'
-    env:
-     - 'windriver':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-HEAT-Staging-Daily'
-         frequency: 'daily'
-         disabled_var: true
-         triggers_var:
-          - timed: 'H 5 * * *'
-     - 'tlab':
-         lab-name: 'tlab'
-         tenant-name: 'ETE-HEAT-Test'
-         frequency: 'daily'
-         disabled_var: true
-         triggers_var:
-          - timed: 'H 22 * * *'
-     - 'windriver-sb07':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-07'
-         frequency: 'weekly'
-         disabled_var: true
-         triggers_var:
-          - timed: 'H 7 * * 6'
+#- project:
+#    name: heat-staging
+#    jobs:
+#     - '{env}-heat-staging-{frequency}'
+#    branch: 'master'
+#    env:
+#     - 'windriver':
+#         lab-name: 'windriver'
+#         tenant-name: 'Integration-HEAT-Staging-Daily'
+#         frequency: 'daily'
+#         disabled_var: true
+#         triggers_var:
+#          - timed: 'H 5 * * *'
+#     - 'tlab':
+#         lab-name: 'tlab'
+#         tenant-name: 'ETE-HEAT-Test'
+#         frequency: 'daily'
+#         disabled_var: true
+#         triggers_var:
+#          - timed: 'H 22 * * *'
+#     - 'windriver-sb07':
+#         lab-name: 'windriver'
+#         tenant-name: 'Integration-SB-07'
+#         frequency: 'weekly'
+#         disabled_var: true
+#         triggers_var:
+#          - timed: 'H 7 * * 6'
 
 #- project:
 #    name: heat-verify
