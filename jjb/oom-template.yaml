@@ -569,7 +569,7 @@
           tenant-name: '{tenant-name}'
           docker_manifest: 'docker-manifest.csv'
           gerrit_branch: '{branch}'
-          gerrit_refspec: 'refs/heads/master'
+          gerrit_refspec: 'refs/heads/{branch}'
     publishers:
       - integration-robot
       - pods-influxdb
@@ -602,7 +602,7 @@
           tenant-name: '{tenant-name}'
           docker_manifest: 'docker-manifest-staging.csv'
           gerrit_branch: '{branch}'
-          gerrit_refspec: 'refs/heads/master'
+          gerrit_refspec: 'refs/heads/{branch}'
     publishers:
       - integration-robot
       - pods-influxdb

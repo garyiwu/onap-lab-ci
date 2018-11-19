@@ -2,7 +2,7 @@
     name: oom-release
     jobs:
      - '{env}-oom-{frequency}'
-    branch: 'master'
+    branch: 'casablanca'
     env:
      - 'windriver':
          lab-name: 'windriver'
@@ -47,7 +47,7 @@
     name: oom-staging
     jobs:
      - '{env}-oom-staging-{frequency}'
-    branch: 'master'
+    branch: 'casablanca'
     env:
      - 'windriver':
          lab-name: 'windriver'
@@ -92,7 +92,7 @@
     name: oom-stability72
     jobs:
      - '{env}-oom-stability72hr'
-    branch: 'master'
+    branch: 'casablanca'
     env:
      - 'windriver-sb02':
          lab-name: 'windriver'
@@ -109,7 +109,7 @@
     name: oom-vfwclosedloop
     jobs:
      - '{env}-oom-vfwclosedloop'
-    branch: 'master'
+    branch: 'casablanca'
     env:
      - 'windriver-sb02':
          lab-name: 'windriver'
@@ -125,13 +125,13 @@
 #     - 'windriver':
 #         lab-name: 'windriver'
 #         tenant-name: 'Integration-OOM-Verify'
-#         branch: 'master'
+#         branch: 'casablanca'
 
 #- project:
 #    name: heat-release
 #    jobs:
 #     - '{env}-heat-{frequency}'
-#    branch: 'master'
+#    branch: 'casablanca'
 #    env:
 #     - 'windriver':
 #         lab-name: 'windriver'
@@ -145,7 +145,7 @@
 #    name: heat-staging
 #    jobs:
 #     - '{env}-heat-staging-{frequency}'
-#    branch: 'master'
+#    branch: 'casablanca'
 #    env:
 #     - 'windriver':
 #         lab-name: 'windriver'
@@ -177,5 +177,5 @@
 #     - 'windriver':
 #         lab-name: 'windriver'
 #         tenant-name: 'Integration-HEAT-Verify'
-#         branch: 'master'
+#         branch: 'casablanca'
 
