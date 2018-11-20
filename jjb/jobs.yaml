@@ -26,7 +26,6 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
          stack-name: 'sb04'
-         frequency: 'weekly'
          frequency: 'manual'
      - 'tlab':
          lab-name: 'tlab'
@@ -74,6 +73,11 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-03'
          stack-name: 'sb03'
+         frequency: 'manual'
+     - 'windriver-sb04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
+         stack-name: 'sb04'
          frequency: 'manual'
      - 'windriver-sb05':
          lab-name: 'windriver'
