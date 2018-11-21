@@ -87,21 +87,11 @@
           - timed: 'H 23 * * *'
 
 - project:
-    name: oom-stability72
+    name: oom-stability
     jobs:
      - '{env}-oom-stability72hr'
-    branch: 'casablanca'
-    env:
-     - 'windriver-sb01':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-01'
-         stack-name: 'sb01'
-         disabled_var: true
-
-- project:
-    name: oom-vfwclosedloop
-    jobs:
      - '{env}-oom-vfwclosedloop'
+     - '{env}-oom-vfwcl-pkg-reboot'
     branch: 'casablanca'
     env:
      - 'windriver-sb01':
