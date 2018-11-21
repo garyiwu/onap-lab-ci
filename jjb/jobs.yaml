@@ -17,13 +17,13 @@
          tenant-name: 'Integration-SB-00'
          stack-name: 'sb00'
          frequency: 'manual'
-         disabled_var: true
+         disabled_var: false
      - 'windriver-sb01':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
          stack-name: 'sb01'
          frequency: 'manual'
-         disabled_var: true
+         disabled_var: false
      - 'windriver-sb02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
@@ -35,13 +35,13 @@
          tenant-name: 'Integration-SB-03'
          stack-name: 'sb03'
          frequency: 'manual'
-         disabled_var: true
+         disabled_var: false
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
          stack-name: 'sb04'
          frequency: 'manual'
-         disabled_var: true
+         disabled_var: false
      - 'windriver-sb05':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-05'
