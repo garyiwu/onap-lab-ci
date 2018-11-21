@@ -17,16 +17,37 @@
          tenant-name: 'Integration-SB-00'
          stack-name: 'sb00'
          frequency: 'manual'
+         disabled_var: true
      - 'windriver-sb01':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
          stack-name: 'sb01'
          frequency: 'manual'
+         disabled_var: true
+     - 'windriver-sb02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+         stack-name: 'sb02'
+         frequency: 'manual'
+         disabled_var: true
+     - 'windriver-sb03':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-03'
+         stack-name: 'sb03'
+         frequency: 'manual'
+         disabled_var: true
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
          stack-name: 'sb04'
          frequency: 'manual'
+         disabled_var: true
+     - 'windriver-sb05':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-05'
+         stack-name: 'sb05'
+         frequency: 'manual'
+         disabled_var: true
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-HEAT-Test'
@@ -53,7 +74,7 @@
          tenant-name: 'Integration-OOM-Staging-Daily'
          stack-name: 'staging'
          frequency: 'daily'
-         disabled_var: false
+         disabled_var: true
          triggers_var:
           - timed: 'H 6 * * *'
      - 'tlab':
@@ -61,36 +82,9 @@
          tenant-name: 'ETE-OOM-Test'
          stack-name: 'staging'
          frequency: 'daily'
-         disabled_var: false
+         disabled_var: true
          triggers_var:
           - timed: 'H 23 * * *'
-     - 'windriver-sb02':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
-         stack-name: 'sb02'
-         frequency: 'manual'
-     - 'windriver-sb03':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-03'
-         stack-name: 'sb03'
-         frequency: 'manual'
-     - 'windriver-sb04':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-04'
-         stack-name: 'sb04'
-         frequency: 'manual'
-     - 'windriver-sb05':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-05'
-         stack-name: 'sb05'
-         disabled_var: true
-         frequency: 'manual'
-     - 'tlab-onap5g':
-         lab-name: 'tlab'
-         tenant-name: 'ONAP-5G'
-         stack-name: 'onap5g'
-         frequency: 'manual'
-         disabled_var: true
 
 - project:
     name: oom-stability72
@@ -98,15 +92,10 @@
      - '{env}-oom-stability72hr'
     branch: 'casablanca'
     env:
-     - 'windriver-sb02':
+     - 'windriver-sb01':
          lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
-         stack-name: 'sb02'
-         disabled_var: true
-     - 'windriver-sb03':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-03'
-         stack-name: 'sb03'
+         tenant-name: 'Integration-SB-01'
+         stack-name: 'sb01'
          disabled_var: true
 
 - project:
@@ -115,10 +104,10 @@
      - '{env}-oom-vfwclosedloop'
     branch: 'casablanca'
     env:
-     - 'windriver-sb02':
+     - 'windriver-sb01':
          lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
-         stack-name: 'sb02'
+         tenant-name: 'Integration-SB-01'
+         stack-name: 'sb01'
          disabled_var: true
 
 #- project:
