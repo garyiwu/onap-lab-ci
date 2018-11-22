@@ -304,7 +304,7 @@
     wrappers:
       - timestamps
     triggers:
-      - timed: '20 0,12 * * *'
+      - timed: '17 4,16 * * *'
     properties:
       - build-blocker:
           blocking-jobs:
@@ -325,20 +325,8 @@
           rm -rf $WORKSPACE/archives
           mkdir -p $WORKSPACE/archives
 
-          SSH_KEY=~/.ssh/onap_key
-          STACK_NAME="{stack-name}"
-          RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
-          K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
-          ssh-keygen -R $RANCHER_IP
-
-          PKG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vPKG | head -1)
-          PUBLIC_NET_ID=$(openstack stack show $STACK_NAME -f json | jq -r '.parameters.public_net_id')
-          PUBLIC_NET_NAME=$(openstack network show $PUBLIC_NET_ID -f value -c name)
-          PKG_IP=$(openstack stack resource show $PKG_STACK vpg_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
-
-          echo "reboot" | ssh -i $SSH_KEY ubuntu@$PKG_IP sudo su
-          retval=$?
-          exit $retval
+          PKG_SERVER=$(openstack server list -f value -c "Name" --sort creation_time:desc | grep demofwl01pgn | head -1)
+          openstack server reboot --hard $PKG_SERVER
     publishers:
       - archive-logs
 
