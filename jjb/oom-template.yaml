@@ -30,8 +30,8 @@
       - timestamps
     parameters:
       - string:
-          name: POD_NAME
-          description: 'Name of pod to delete.  This string will be grepped against the pod list and used to kill and check for restart.'
+          name: POD_TO_DELETE
+          description: 'Name of pod to delete.  This string will be grepped against the pod list and used to delete the pod.'
     properties:
       - build-blocker:
           blocking-jobs:
@@ -59,11 +59,11 @@
             exit 1
           fi
 
-          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_NAME | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
           echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
           for n in $(seq 1 30); do
             sleep 30
-            RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep $POD_NAME | grep -vE '1/1|2/2' | wc -l)
+            RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep Running | grep -vE '1/1|2/2' | wc -l)
             if [[ $? -eq 0 && $RESULT -eq 0 ]]; then
               break
             fi
