@@ -62,7 +62,7 @@
 
           POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
           echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          for n in $(seq 1 30); do
+          for n in $(seq 1 100); do
             sleep 30
             RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2' | wc -l)
             if [[ $? -eq 0 && $RESULT -eq 0 ]]; then
@@ -132,7 +132,7 @@
 
           POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
           echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          for n in $(seq 1 30); do
+          for n in $(seq 1 100); do
             sleep 30
             RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2' | wc -l)
             if [[ $? -eq 0 && $RESULT -eq 0 ]]; then
