@@ -165,6 +165,89 @@
       - archive-logs
 
 - job-template:
+    name: '{env}-oom-resilience-vfwclosedloop'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git-integration:
+          branch: "{branch}"
+    wrappers:
+      - timestamps
+    parameters:
+      - string:
+          name: POD_TO_DELETE
+          description: 'Name of pod to delete.  This string will be grepped against the pod list and used to delete the pod.'
+    properties:
+      - build-blocker:
+          blocking-jobs:
+            - "{env}-oom-deploy"
+            - "{env}-oom-healthcheck"
+    builders:
+      - shell: |
+          #!/bin/bash
+          set +x
+          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
+          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
+          source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
+
+          set -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+
+          SSH_KEY=~/.ssh/onap_key
+          STACK_NAME="{stack-name}"
+          RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
+          K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
+          ssh-keygen -R $RANCHER_IP
+
+          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
+          if [ "$ROBOT_POD" == "" ]; then
+            exit 1
+          fi
+
+          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          for n in $(seq 1 100); do
+            sleep 30
+            RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2' | wc -l)
+            if [[ $? -eq 0 && $RESULT -eq 0 ]]; then
+              break
+            fi
+          done
+
+          PKG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vPKG | head -1)
+          PUBLIC_NET_ID=$(openstack stack show $STACK_NAME -f json | jq -r '.parameters.public_net_id')
+          PUBLIC_NET_NAME=$(openstack network show $PUBLIC_NET_ID -f value -c name)
+          PKG_IP=$(openstack stack resource show $PKG_STACK vpg_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
+
+          PREV_RESULT=0
+          for n in $(seq 1 10); do
+            echo "Wait for vfwclosedloop count $n of 10"
+            echo "/root/oom/kubernetes/robot/demo-k8s.sh onap vfwclosedloop $PKG_IP" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+            RESULT=$?
+            if [[ $RESULT -lt 10 && ( $RESULT -eq 0 || $RESULT -eq $PREV_RESULT ) ]]; then
+              break
+            fi
+            PREV_RESULT=$RESULT
+          done
+
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep vfwclosedloop | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          if [ "$LOG_DIR" == "" ]; then
+            exit 1
+          fi
+
+          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+
+          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
+
+          exit 0
+    publishers:
+      - integration-robot
+      - archive-logs
+
+- job-template:
     name: '{env}-oom-instantiate'
     project-type: freestyle
     lab-name: ''

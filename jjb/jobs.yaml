@@ -94,6 +94,7 @@
      - '{env}-oom-vfwcl-pkg-reboot'
      - '{env}-oom-resilience-healthdist'
      - '{env}-oom-resilience-instantiateDemoVFWCL'
+     - '{env}-oom-resilience-vfwclosedloop'
     branch: 'casablanca'
     env:
      - 'windriver-sb00':
