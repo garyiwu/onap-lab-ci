@@ -93,8 +93,14 @@
      - '{env}-oom-vfwclosedloop'
      - '{env}-oom-vfwcl-pkg-reboot'
      - '{env}-oom-resilience-healthdist'
+     - '{env}-oom-resilience-instantiateDemoVFWCL'
     branch: 'casablanca'
     env:
+     - 'windriver-sb00':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-00'
+         stack-name: 'sb00'
+         disabled_var: true
      - 'windriver-sb01':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
