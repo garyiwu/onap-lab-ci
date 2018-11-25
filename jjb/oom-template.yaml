@@ -19,7 +19,7 @@
       - archive-logs
 
 - job-template:
-    name: '{env}-oom-healthdist-resilience'
+    name: '{env}-oom-resilience-healthdist'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -28,8 +28,10 @@
           branch: "{branch}"
     wrappers:
       - timestamps
-    triggers:
-      - timed: 'H/20 * * * *'
+    parameters:
+      - string:
+          name: POD_NAME
+          description: 'Name of pod to delete.  This string will be grepped against the pod list and used to kill and check for restart.'
     properties:
       - build-blocker:
           blocking-jobs:
@@ -57,12 +59,15 @@
             exit 1
           fi
 
-          touch $WORKSPACE/kill-history.txt
-          GREP_TO_KILL=$( {{ cat $JENKINS_HOME/onap-lab-ci/jobs/$JOB_NAME/kill-list.txt; awk '{{print $1}}' < $WORKSPACE/kill-history.txt; }} | sort | uniq -c | sort -n | head -1 | awk '{{print $2}}')
-          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep dev-$GREP_TO_KILL- | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
-          echo "$GREP_TO_KILL $POD_TO_KILL $BUILD_NUMBER $(date -Is)" >> $WORKSPACE/kill-history.txt
-          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su
-          sleep 15m
+          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_NAME | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          for n in $(seq 1 30); do
+            sleep 30
+            RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep $POD_NAME | grep -vE '1/1|2/2' | wc -l)
+            if [[ $? -eq 0 && $RESULT -eq 0 ]]; then
+              break
+            fi
+          done
 
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap healthdist"'
           retval=$?

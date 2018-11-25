@@ -92,6 +92,7 @@
      - '{env}-oom-stability72hr'
      - '{env}-oom-vfwclosedloop'
      - '{env}-oom-vfwcl-pkg-reboot'
+     - '{env}-oom-resilience-healthdist'
     branch: 'casablanca'
     env:
      - 'windriver-sb01':
