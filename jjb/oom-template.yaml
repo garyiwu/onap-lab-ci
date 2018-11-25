@@ -155,7 +155,7 @@
 
           # clean up demo stacks
           DEMO_STACKS=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_ )
-          if [ ! -z "$DEMO_STACKS" ]; do
+          if [ ! -z "$DEMO_STACKS" ]; then
             openstack stack delete -y $DEMO_STACKS
           fi
 
