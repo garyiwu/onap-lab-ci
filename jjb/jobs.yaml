@@ -55,7 +55,7 @@
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 20 * * *'
+          - timed: 'H 4 * * *'
      - 'tlab-onap5g':
          lab-name: 'tlab'
          tenant-name: 'ONAP-5G'
