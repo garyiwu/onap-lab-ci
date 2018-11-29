@@ -719,6 +719,11 @@
           cd $WORKSPACE/archives
           rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge $(ls -rt */output.xml)
 
+          # temporary workaround to delete tlab-oom-daily after deployment
+          if [[ "{lab-name}" == "tlab" && "{tenant-name}" == "ETE-HEAT-Test" ]]; then
+            $WORKSPACE/test/ete/scripts/teardown-onap.sh -q
+          fi
+
           exit 0
 
 - job-template:
