@@ -82,7 +82,7 @@
           mkdir -p /var/www/html/logs/$JOB_NAME/$BUILD_NUMBER
           curl -s -f "http://localhost:8080/jenkins/job/$JOB_NAME/$BUILD_NUMBER/consoleText" > $WORKSPACE/archives/console.log
           curl -s -f "http://localhost:8080/jenkins/job/$JOB_NAME/$BUILD_NUMBER/timestamps/?time=HH:mm:ssZ&appendLog" >  $WORKSPACE/archives/console-source-timestamp.log
-          rsync -avtz $WORKSPACE/archives/ /var/www/html/logs/$JOB_NAME/$BUILD_NUMBER
+          rsync -avt $WORKSPACE/archives/ /var/www/html/logs/$JOB_NAME/$BUILD_NUMBER
           echo
           echo "Browse logs at http://onapci.org/logs/$JOB_NAME/$BUILD_NUMBER/"
           echo
