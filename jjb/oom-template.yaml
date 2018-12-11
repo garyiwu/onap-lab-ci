@@ -593,7 +593,7 @@
 
           cd $WORKSPACE/deployment/heat/onap-oom
           envsubst < $ENV_FILE > $ENV_FILE~
-          if ! openstack stack create -t ./onap-oom.yaml -e $ENV_FILE~ $STACK_NAME --parameter docker_manifest={docker_manifest} --parameter integration_gerrit_branch={gerrit_branch} --parameter integration_gerrit_refspec={gerrit_refspec}; then
+          if ! openstack stack create -t ./onap-oom.yaml -e $ENV_FILE~ $STACK_NAME --parameter docker_manifest={docker_manifest} --parameter portal_hostname={stack-name}.{lab-name}.onapci.org --parameter integration_gerrit_branch={gerrit_branch} --parameter integration_gerrit_refspec={gerrit_refspec}; then
             exit 1
           fi
           while [ "CREATE_IN_PROGRESS" == "$(openstack stack show -c stack_status -f value $STACK_NAME)" ]; do
