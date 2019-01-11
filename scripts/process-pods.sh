@@ -8,7 +8,7 @@ JSON_OUTPUT=$1
 JOB=$2
 BUILD=$3
 
-INFLUX_ENDPOINT='http://10.145.123.20:8086/write?db=robot'
+INFLUX_ENDPOINT='http://10.145.123.16:8086/write?db=robot'
 
 
 TIME=$(date -r $JSON_OUTPUT +%s%N)
