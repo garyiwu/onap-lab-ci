@@ -20,6 +20,7 @@
 
 - job-template:
     name: '{env}-oom-resilience-healthdist'
+    disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -90,6 +91,7 @@
 
 - job-template:
     name: '{env}-oom-resilience-instantiateDemoVFWCL'
+    disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -166,6 +168,7 @@
 
 - job-template:
     name: '{env}-oom-resilience-vfwclosedloop'
+    disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
