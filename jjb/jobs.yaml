@@ -53,7 +53,7 @@
          tenant-name: 'ETE-HEAT-Test'
          stack-name: 'release'
          frequency: 'daily'
-         disabled_var: false
+         disabled_var: true
          triggers_var:
           - timed: 'H 4 * * *'
      - 'tlab-onap5g':
