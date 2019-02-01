@@ -91,7 +91,6 @@
     jobs:
      - '{env}-oom-stability72hr'
      - '{env}-oom-vfwclosedloop'
-     - '{env}-oom-vfwcl-pkg-reboot'
      - '{env}-oom-resilience-healthdist'
      - '{env}-oom-resilience-instantiateDemoVFWCL'
      - '{env}-oom-resilience-vfwclosedloop'
