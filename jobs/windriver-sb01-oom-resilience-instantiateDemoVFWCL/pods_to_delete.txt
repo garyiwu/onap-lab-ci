@@ -14,6 +14,12 @@ dev-aai-aai-search-data-8d77c9d-s5g4l
 dev-aai-aai-sparky-be-577b95c76d-9dspz
 dev-aai-aai-spike-59c6db6574-c5nck
 dev-aai-aai-traversal-86f575c7f7-5mgnk
+dev-multicloud-multicloud-7cd96f75fb-hmgwp
+dev-multicloud-multicloud-azure-85548b6469-m4tqt
+dev-multicloud-multicloud-ocata-cfbc7dd4b-nxqnv
+dev-multicloud-multicloud-pike-57778fb4fc-q8gt2
+dev-multicloud-multicloud-vio-794f8b7d85-7h8qt
+dev-multicloud-multicloud-windriver-75b7659f96-m7kh9
 dev-sdc-sdc-be-694b9b557b-ckk9h
 dev-sdc-sdc-dcae-be-5bb587d95c-9gk2h
 dev-sdc-sdc-dcae-dt-68d8d77578-vsstx
@@ -31,7 +37,6 @@ dev-sdnc-nengdb-0
 dev-sdnc-network-name-gen-d89496744-lrj88
 dev-sdnc-sdnc-0
 dev-sdnc-sdnc-ansible-server-5f8b66b9b4-qfqgj
-dev-sdnc-sdnc-db-0
 dev-sdnc-sdnc-dgbuilder-865fbf655d-2zbw7
 dev-sdnc-sdnc-dmaap-listener-7c9f456bf6-kt49n
 dev-sdnc-sdnc-portal-597cb97887-b4t42
@@ -46,3 +51,4 @@ dev-so-so-request-db-adapter-7758c846f9-6hg4j
 dev-so-so-sdc-controller-6cd84f4797-cbjbn
 dev-so-so-sdnc-adapter-6b7c558f56-hbh9n
 dev-so-so-vfc-adapter-8664b4db56-gmp5p
+dev-vid-vid-78bc8969d9-blqpj
