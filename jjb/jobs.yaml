@@ -2,7 +2,7 @@
     name: oom-release
     jobs:
      - '{env}-oom-{frequency}'
-    branch: 'casablanca'
+    branch: 'master'
     env:
      - 'windriver':
          lab-name: 'windriver'
@@ -11,7 +11,7 @@
          frequency: 'daily'
          disabled_var: false
          triggers_var:
-          - timed: 'H 10 * * *'
+          - timed: 'H 8 * * *'
      - 'windriver-sb00':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-00'
@@ -67,16 +67,16 @@
     name: oom-staging
     jobs:
      - '{env}-oom-staging-{frequency}'
-    branch: 'casablanca'
+    branch: 'master'
     env:
      - 'windriver':
          lab-name: 'windriver'
          tenant-name: 'Integration-OOM-Staging-Daily'
          stack-name: 'staging'
          frequency: 'daily'
-         disabled_var: true
+         disabled_var: false
          triggers_var:
-          - timed: 'H 10 * * *'
+          - timed: 'H 5 * * *'
      - 'tlab':
          lab-name: 'tlab'
          tenant-name: 'ETE-OOM-Test'
