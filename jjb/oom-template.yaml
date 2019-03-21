@@ -581,8 +581,16 @@
 
           SSH_KEY=~/.ssh/onap_key
           ENV_FILE=./env/{lab-name}/onap-oom.env
+          #SO_ENCRYPTION_KEY=aa3871669d893c7fb8abbcda31b88b4f
+          #export OS_PASSWORD_ENCRYPTED=$(echo -n "$OS_PASSWORD" | openssl aes-128-ecb -e -K "$SO_ENCRYPTION_KEY" -nosalt | xxd -c 256 -p)
+
+          #Use new encryption method
+          pushd $WORKSPACE/deployment/heat/onap-oom/scripts
+          javac Crypto.java
           SO_ENCRYPTION_KEY=aa3871669d893c7fb8abbcda31b88b4f
-          export OS_PASSWORD_ENCRYPTED=$(echo -n "$OS_PASSWORD" | openssl aes-128-ecb -e -K "$SO_ENCRYPTION_KEY" -nosalt | xxd -c 256 -p)
+          export OS_PASSWORD_ENCRYPTED=$(java Crypto "$OS_PASSWORD" "$SO_ENCRYPTION_KEY")
+          popd
+
 
           STACK_NAME="{stack-name}"
 
