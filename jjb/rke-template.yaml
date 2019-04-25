@@ -28,25 +28,26 @@
           set -x
 
           PREV_RESULT=0
-          for n in $(seq 1 20); do
+          for n in $(seq 1 8); do
+            echo "Wait for pods to be up, $n of 8"
             RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2' | wc -l)
-            if [[ $? -eq 0 && ( $RESULT -eq 0 || $RESULT -eq $PREV_RESULT ) ]]; then
+            if [[ $? -eq 0 && ( $RESULT -eq 0 || $RESULT -ge $PREV_RESULT ) ]]; then
               break
             fi
-            sleep 20m
+            sleep 15m
             PREV_RESULT=$RESULT
           done
 
           PREV_RESULT=0
-          for n in $(seq 1 20); do
-            echo "Wait for HEALTHCHECK count $n of 10"
+          for n in $(seq 1 8); do
+            echo "Wait for HEALTHCHECK, $n of 8"
             ROBOT_POD=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl --namespace onap get pods"' | grep robot | sed 's/ .*//')
             ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap health"'
             RESULT=$?
-            if [[ $RESULT -lt 10 && ( $RESULT -eq 0 || $RESULT -eq $PREV_RESULT ) ]]; then
+            if [[ $RESULT -lt 20 && ( $RESULT -eq 0 || $RESULT -ge $PREV_RESULT ) ]]; then
               break
             fi
-            sleep 20m
+            sleep 15m
             PREV_RESULT=$RESULT
           done
           if [ "$ROBOT_POD" == "" ]; then
