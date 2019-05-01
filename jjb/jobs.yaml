@@ -39,6 +39,21 @@
          frequency: 'manual'
          disabled_var: true
 
+- project:
+    name: rke-release
+    jobs:
+     - '{env}-release-{frequency}'
+    branch: 'master'
+    env:
+     - 'windriver':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-OOM-Daily'
+         stack-name: 'release'
+         frequency: 'daily'
+         disabled_var: false
+         triggers_var:
+          - timed: 'H 6 * * *'
+
 #- project:
 #    name: oom-stability
 #    jobs:

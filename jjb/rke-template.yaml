@@ -18,7 +18,7 @@
           STACK_NAME={stack-name}
 
           cd $WORKSPACE/deployment/heat/onap-rke/
-          ./scripts/deploy.sh -s $STACK_NAME -m {docker_manifest} -d {stack-name}.{lab-name}.onapci.org -q $ENV_FILE
+          ./scripts/deploy.sh -s $STACK_NAME {docker_manifest_option} -d {stack-name}.{lab-name}.onapci.org -q $ENV_FILE
 
           RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
           K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
@@ -168,7 +168,40 @@
           stack-name: '{stack-name}'
           lab-name: '{lab-name}'
           tenant-name: '{tenant-name}'
-          docker_manifest: 'docker-manifest-staging.csv'
+          docker_manifest_option: '-m docker-manifest-staging.csv'
+          gerrit_branch: '{branch}'
+          gerrit_refspec: 'refs/heads/{branch}'
+    publishers:
+      - integration-robot
+      - pods-influxdb
+      - archive-logs
+      - trigger-lf-lab-job:
+          lab-name: '{lab-name}'
+
+- job-template:
+    disabled_var:
+    triggers_var:
+    name: '{env}-rke-release-{frequency}'
+    description: 'RKE OOM Staging deployment to {lab-name} {tenant-name}'
+    disabled: '{obj:disabled_var}'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git-integration:
+          branch: "{branch}"
+    wrappers:
+      - timestamps
+      - timeout:
+          timeout: 720
+          fail: true
+    triggers: '{obj:triggers_var}'
+    builders:
+      - run-rke-ete:
+          stack-name: '{stack-name}'
+          lab-name: '{lab-name}'
+          tenant-name: '{tenant-name}'
+          docker_manifest_option: ''
           gerrit_branch: '{branch}'
           gerrit_refspec: 'refs/heads/{branch}'
     publishers:
