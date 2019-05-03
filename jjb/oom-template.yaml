@@ -893,14 +893,31 @@
             image=$(echo $line | cut -d : -f 1)
             tag=$(echo $line | cut -d : -f 2)
 
-            tags=$(curl -s $NEXUS_RELEASE_PREFIX/$image/tags/list | jq -r '.tags[]' 2> /dev/null)
-            echo "$tags" | grep -q "^$tag\$"
-            if [ $? -ne 0 ]; then
+            case $tag in
+            *STAGING*)
               echo "[ERROR] $image:$tag not released"
               (( err++ ))
-            else
-              echo "[INFO] $image:$tag OK"
-            fi
+              ;;
+            *SNAPSHOT*)
+              echo "[ERROR] $image:$tag not released"
+              (( err++ ))
+              ;;
+            *latest*)
+              echo "[ERROR] $image:$tag not released"
+              (( err++ ))
+              ;;
+            *)
+              tags=$(curl -s $NEXUS_RELEASE_PREFIX/$image/tags/list | jq -r '.tags[]' 2> /dev/null)
+              echo "$tags" | grep -q "^$tag\$"
+              if [ $? -ne 0 ]; then
+                echo "[ERROR] $image:$tag not released"
+                (( err++ ))
+              else
+                echo "[INFO] $image:$tag OK"
+              fi
+              ;;
+            esac
+
           done
           exit $err
 
