@@ -54,6 +54,12 @@
          triggers_var:
           - timed: 'H 6 * * *'
 
+- project:
+    name: oom-verify
+    jobs:
+     - 'oom-verify'
+    branch: 'master'
+
 #- project:
 #    name: oom-stability
 #    jobs:

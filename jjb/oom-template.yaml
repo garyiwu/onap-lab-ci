@@ -847,8 +847,6 @@
 - job-template:
     name: 'oom-verify'
     project-type: freestyle
-    lab-name: ''
-    tenant-name: ''
     scm:
       - gerrit-trigger-scm
     triggers:
