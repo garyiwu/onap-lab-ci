@@ -843,3 +843,54 @@
       - archive-logs
       - trigger-lf-lab-job:
           lab-name: '{lab-name}'
+
+- job-template:
+    name: 'oom-verify'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - gerrit-trigger-scm
+    triggers:
+      - gerrit-trigger-patch-submitted:
+          project: 'oom'
+          branch: '{branch}'
+          files: 'kubernetes/**'
+    wrappers:
+      - timestamps
+      - timeout:
+          timeout: 720
+          fail: true
+    builders:
+      - shell: |
+          #!/bin/bash
+
+          set +e
+          set -x
+
+          NEXUS_RELEASE_PREFIX="https://nexus3.onap.org/repository/docker.release/v2"
+          err=0
+          cd kubernetes
+
+          IMAGES=`mktemp`
+          rgrep -h -E ': onap/.*:.*' | awk '{$1=$1};1' | cut -d' ' -f2 | sort | uniq > $IMAGES
+
+          set +x
+          for line in $(cat $IMAGES); do
+            image=$(echo $line | cut -d : -f 1)
+            tag=$(echo $line | cut -d : -f 2)
+
+            tags=$(curl -s $NEXUS_RELEASE_PREFIX/$image/tags/list | jq -r '.tags[]' 2> /dev/null)
+            echo "$tags" | grep -q "^$tag\$"
+            if [ $? -ne 0 ]; then
+              echo "[ERROR] $image:$tag not released"
+              (( err++ ))
+            else
+              echo "[INFO] $image:$tag OK"
+            fi
+          done
+          exit $err
+
+    publishers:
+      - integration-robot
+      - archive-logs

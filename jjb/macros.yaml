@@ -18,7 +18,10 @@
           refspec: '$GERRIT_REFSPEC'
           branches:
             - 'origin/$GERRIT_BRANCH'
+          skip-tag: true
           choosing-strategy: 'gerrit'
+          submodule:
+            recursive: true
 
 - publisher:
     name: integration-robot
