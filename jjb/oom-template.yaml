@@ -891,5 +891,4 @@
           exit $err
 
     publishers:
-      - integration-robot
       - archive-logs
