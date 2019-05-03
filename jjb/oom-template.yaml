@@ -878,6 +878,8 @@
 
           set +e
           set -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
 
           NEXUS_RELEASE_PREFIX="https://nexus3.onap.org/repository/docker.release/v2"
           err=0
