@@ -58,6 +58,7 @@
     name: oom-verify
     jobs:
      - 'oom-verify'
+    project: 'oom'
     branch: 'master'
 
 #- project:

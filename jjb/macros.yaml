@@ -14,7 +14,7 @@
     name: gerrit-trigger-scm
     scm:
       - git:
-          url: 'http://gerrit.onap.org/r/{project}'
+          url: 'http://gerrit.onap.org/r/$GERRIT_PROJECT'
           refspec: '$GERRIT_REFSPEC'
           branches:
             - 'origin/$GERRIT_BRANCH'
