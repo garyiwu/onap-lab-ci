@@ -848,7 +848,8 @@
     name: 'oom-verify'
     project-type: freestyle
     scm:
-      - gerrit-trigger-scm
+      - gerrit-trigger-scm:
+          project: 'oom'
     triggers:
       - gerrit-trigger-patch-submitted:
           project: 'oom'
@@ -871,7 +872,7 @@
           cd kubernetes
 
           IMAGES=`mktemp`
-          rgrep -h -E ': onap/.*:.*' | awk '{$1=$1};1' | cut -d' ' -f2 | sort | uniq > $IMAGES
+          rgrep -h -E ': onap/.*:.*' | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq > $IMAGES
 
           set +x
           for line in $(cat $IMAGES); do
