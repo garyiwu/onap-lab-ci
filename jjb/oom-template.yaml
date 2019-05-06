@@ -850,7 +850,7 @@
     parameters:
       - string:
           name: GERRIT_PROJECT
-          default: '{project}'
+          default: 'oom'
           description: 'GERRIT_PROJECT parameter if not given by trigger'
       - string:
           name: GERRIT_BRANCH
@@ -864,9 +864,13 @@
       - gerrit-trigger-scm
     triggers:
       - gerrit-trigger-patch-submitted:
-          project: '{project}'
+          project: 'oom'
           branch: '{branch}'
           files: 'kubernetes/**'
+      - gerrit-trigger-patch-submitted:
+          project: '*/oom'
+          branch: '{branch}'
+          files: '**'
     wrappers:
       - timestamps
       - timeout:
