@@ -910,10 +910,10 @@
           # if no files changed, will scan all files
           CHANGED_FILES=""
           if [ $(git rev-parse HEAD) != $(git rev-parse origin/master) ]; then
-            CHANGED_FILES=$(git diff --name-only HEAD^)
+            CHANGED_FILES=$(git diff-tree --no-commit-id --name-only HEAD)
           fi
           IMAGES=`mktemp`
-          rgrep -h -E ': onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq > $IMAGES
+          rgrep -h -E ': onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq | tee $IMAGES
 
           set +x
           for line in $(cat $IMAGES); do
@@ -939,8 +939,6 @@
               if [ $? -ne 0 ]; then
                 echo "[ERROR] $image:$tag not released"
                 (( err++ ))
-              else
-                echo "[INFO] $image:$tag OK"
               fi
               ;;
             esac
