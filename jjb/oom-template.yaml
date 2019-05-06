@@ -906,10 +906,10 @@
 
           NEXUS_RELEASE_PREFIX="https://nexus3.onap.org/repository/docker.release/v2"
           err=0
-          cd kubernetes
 
+          # if no files changed, will scan all files
           IMAGES=`mktemp`
-          rgrep -h -E ': onap/.*:.*' | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq > $IMAGES
+          rgrep -h -E ': onap/.*:.*' $(git diff --name-only origin/{branch}) | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq > $IMAGES
 
           set +x
           for line in $(cat $IMAGES); do
