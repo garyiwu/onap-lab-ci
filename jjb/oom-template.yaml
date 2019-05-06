@@ -912,11 +912,11 @@
           if [ $(git rev-parse HEAD) != $(git rev-parse origin/master) ]; then
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r HEAD)
           fi
-          IMAGES=`mktemp`
-          rgrep -h -E ': onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq | tee $IMAGES
+          IMAGES_FILE=`mktemp --suffix=_images.txt`
+          rgrep -h -E ': onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq | tee $IMAGES_FILE
 
           set +x
-          for line in $(cat $IMAGES); do
+          for line in $(cat $IMAGES_FILE); do
             image=$(echo $line | cut -d : -f 1)
             tag=$(echo $line | cut -d : -f 2)
 
@@ -944,6 +944,7 @@
             esac
 
           done
+          rm $IMAGES_FILE
           exit $err
 
     publishers:
