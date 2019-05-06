@@ -863,14 +863,33 @@
     scm:
       - gerrit-trigger-scm
     triggers:
-      - gerrit-trigger-patch-submitted:
-          project: 'oom'
-          branch: '{branch}'
-          files: 'kubernetes/**'
-      - gerrit-trigger-patch-submitted:
-          project: '*/oom'
-          branch: '{branch}'
-          files: '**'
+      - gerrit:
+          server-name: 'gerrit.onap.org'
+          trigger-on:
+            - patchset-created-event:
+                exclude-drafts: 'false'
+                exclude-trivial-rebase: 'false'
+                exclude-no-code-change: 'false'
+            - draft-published-event
+            - comment-added-contains-event:
+                comment-contains-value: 'recheck'
+          projects:
+            - project-compare-type: 'ANT'
+              project-pattern: 'oom'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '**/{branch}'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: 'kubernetes/**'
+            - project-compare-type: 'ANT'
+              project-pattern: '*/oom'
+              branches:
+                - branch-compare-type: 'ANT'
+                  branch-pattern: '**/{branch}'
+              file-paths:
+                - compare-type: 'ANT'
+                  pattern: '**'
     wrappers:
       - timestamps
       - timeout:
