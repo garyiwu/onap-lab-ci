@@ -908,8 +908,12 @@
           err=0
 
           # if no files changed, will scan all files
+          CHANGED_FILES=""
+          if [ $(git rev-parse HEAD) != $(git rev-parse origin/master) ]; then
+            CHANGED_FILES=$(git diff --name-only HEAD^)
+          fi
           IMAGES=`mktemp`
-          rgrep -h -E ': onap/.*:.*' $(git diff --name-only origin/{branch}) | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq > $IMAGES
+          rgrep -h -E ': onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq > $IMAGES
 
           set +x
           for line in $(cat $IMAGES); do
