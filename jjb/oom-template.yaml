@@ -905,6 +905,7 @@
           mkdir -p $WORKSPACE/archives
 
           NEXUS_RELEASE_PREFIX="https://nexus3.onap.org/repository/docker.release/v2"
+          RELEASE_TAGS_PATH="/tmp/onap-docker-release"
           err=0
 
           # if no files changed, will scan all files
@@ -934,17 +935,25 @@
               (( err++ ))
               ;;
             *)
-              tags=$(curl -s $NEXUS_RELEASE_PREFIX/$image/tags/list | jq -r '.tags[]' 2> /dev/null)
-              echo "$tags" | grep -q "^$tag\$"
+              TAGS_FILE=$RELEASE_TAGS_PATH/$image/tags.txt
+              mkdir -p $RELEASE_TAGS_PATH/$image
+              touch $TAGS_FILE
+              grep -q "^$tag\$" $TAGS_FILE
               if [ $? -ne 0 ]; then
-                echo "[ERROR] $image:$tag not released"
-                (( err++ ))
+                # not found; download latest
+                curl -s $NEXUS_RELEASE_PREFIX/$image/tags/list | jq -r '.tags[]' > $TAGS_FILE 2> /dev/null
+                grep -q "^$tag\$" $TAGS_FILE
+                if [ $? -ne 0 ]; then
+                  echo "[ERROR] $image:$tag not released"
+                  (( err++ ))
+                fi
               fi
               ;;
             esac
 
           done
           rm $IMAGES_FILE
+          echo $err unreleased images found.
           exit $err
 
     publishers:
