@@ -881,7 +881,7 @@
                   branch-pattern: '**/{branch}'
               file-paths:
                 - compare-type: 'ANT'
-                  pattern: 'kubernetes/**'
+                  pattern: 'kubernetes/**/*.yaml'
             - project-compare-type: 'ANT'
               project-pattern: '*/oom'
               branches:
@@ -889,7 +889,7 @@
                   branch-pattern: '**/{branch}'
               file-paths:
                 - compare-type: 'ANT'
-                  pattern: '**'
+                  pattern: '**/*.yaml'
     wrappers:
       - timestamps
       - timeout:
