@@ -53,6 +53,12 @@
          disabled_var: false
          triggers_var:
           - timed: 'H 6 * * *'
+     - 'windriver-sb01':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-01'
+         stack-name: 'sb01'
+         frequency: 'manual'
+         disabled_var: true
 
 - project:
     name: oom-verify
