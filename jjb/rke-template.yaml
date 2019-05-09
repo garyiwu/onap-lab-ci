@@ -80,14 +80,6 @@
           mkdir -p $WORKSPACE/archives/ete
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/ete
 
-          # ete distribute
-          ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap distribute"'
-          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep distribute | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
-          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
-          mkdir -p $WORKSPACE/archives/distribute
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/distribute
-
           # ete instantiate
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap instantiate"'
           LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep instantiate | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
