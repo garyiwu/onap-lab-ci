@@ -18,7 +18,6 @@
           refspec: '$GERRIT_REFSPEC'
           branches:
             - 'origin/$GERRIT_BRANCH'
-          wipe-workspace: false
           skip-tag: true
           choosing-strategy: 'gerrit'
           submodule:
