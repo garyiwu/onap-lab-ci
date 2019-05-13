@@ -12,32 +12,6 @@
          disabled_var: false
          triggers_var:
           - timed: 'H 4 * * *'
-     - 'windriver-sb00':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-00'
-         stack-name: 'sb00'
-         frequency: 'manual'
-         disabled_var: true
-     - 'windriver-sb01':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-01'
-         stack-name: 'sb01'
-         frequency: 'daily'
-         disabled_var: true
-         triggers_var:
-          - timed: 'H 6 * * *'
-     - 'windriver-sb02':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
-         stack-name: 'sb02'
-         frequency: 'manual'
-         disabled_var: true
-     - 'windriver-sb03':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-03'
-         stack-name: 'sb03'
-         frequency: 'manual'
-         disabled_var: true
 
 - project:
     name: rke-release
@@ -53,6 +27,12 @@
          disabled_var: false
          triggers_var:
           - timed: 'H 6 * * *'
+     - 'windriver-sb00':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-00'
+         stack-name: 'sb00'
+         frequency: 'manual'
+         disabled_var: true
      - 'windriver-sb01':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
