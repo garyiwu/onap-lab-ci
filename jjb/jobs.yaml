@@ -32,13 +32,13 @@
          tenant-name: 'Integration-SB-00'
          stack-name: 'sb00'
          frequency: 'manual'
-         disabled_var: true
+         disabled_var: false
      - 'windriver-sb01':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
          stack-name: 'sb01'
          frequency: 'manual'
-         disabled_var: true
+         disabled_var: false
 
 - project:
     name: oom-verify
