@@ -917,7 +917,7 @@
           rgrep -n -E ':\s*onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | sort > $IMAGES_FILE
 
           set +x
-          cat $IMAGES_FILE | while read line; do
+          while read line; do
             location=$(echo $line | cut -d: -f-2)
             image_tag=$(echo $line | cut -d: -f3- | awk '{{$1=$1}};1' | cut -d' ' -f2)
             image=$(echo $image_tag | cut -d : -f 1)
@@ -952,9 +952,7 @@
               fi
               ;;
             esac
-
-          done
-          rm $IMAGES_FILE
+          done < $IMAGES_FILE
           echo $err unreleased images found.
           exit $err
 
