@@ -914,7 +914,7 @@
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r HEAD)
           fi
           IMAGES_FILE=`mktemp --suffix=_images.txt`
-          rgrep -h -E ': onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq | tee $IMAGES_FILE
+          rgrep -h -E ':\s*onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq | tee $IMAGES_FILE
 
           set +x
           for line in $(cat $IMAGES_FILE); do
