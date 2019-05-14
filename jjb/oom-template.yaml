@@ -914,12 +914,12 @@
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r HEAD)
           fi
           IMAGES_FILE=$WORKSPACE/archives/images.txt
-          rgrep -n -E ':\s*onap/.*:.*' $CHANGED_FILES | awk '{$1=$1};1' | sort > $IMAGES_FILE
+          rgrep -n -E ':\s*onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | sort > $IMAGES_FILE
 
           set +x
           cat $IMAGES_FILE | while read line; do
             location=$(echo $line | cut -d: -f-2)
-            image_tag=$(echo $line | cut -d: -f3- | awk '{$1=$1};1' | cut -d' ' -f2)
+            image_tag=$(echo $line | cut -d: -f3- | awk '{{$1=$1}};1' | cut -d' ' -f2)
             image=$(echo $image_tag | cut -d : -f 1)
             tag=$(echo $image_tag | cut -d : -f 2)
 
