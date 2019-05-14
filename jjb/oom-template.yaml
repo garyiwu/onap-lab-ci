@@ -913,25 +913,27 @@
           if [ $(git rev-parse HEAD) != $(git rev-parse origin/master) ]; then
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r HEAD)
           fi
-          IMAGES_FILE=`mktemp --suffix=_images.txt`
-          rgrep -h -E ':\s*onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | cut -d' ' -f2 | sort | uniq | tee $IMAGES_FILE
+          IMAGES_FILE=$WORKSPACE/archives/images.txt
+          rgrep -n -E ':\s*onap/.*:.*' $CHANGED_FILES | awk '{$1=$1};1' | sort > $IMAGES_FILE
 
           set +x
-          for line in $(cat $IMAGES_FILE); do
-            image=$(echo $line | cut -d : -f 1)
-            tag=$(echo $line | cut -d : -f 2)
+          cat $IMAGES_FILE | while read line; do
+            location=$(echo $line | cut -d: -f-2)
+            image_tag=$(echo $line | cut -d: -f3- | awk '{$1=$1};1' | cut -d' ' -f2)
+            image=$(echo $image_tag | cut -d : -f 1)
+            tag=$(echo $image_tag | cut -d : -f 2)
 
             case $tag in
             *STAGING*)
-              echo "[ERROR] $image:$tag not released"
+              echo "[ERROR] $line not released"
               (( err++ ))
               ;;
             *SNAPSHOT*)
-              echo "[ERROR] $image:$tag not released"
+              echo "[ERROR] $line not released"
               (( err++ ))
               ;;
             *latest*)
-              echo "[ERROR] $image:$tag not released"
+              echo "[ERROR] $line not released"
               (( err++ ))
               ;;
             *)
@@ -944,7 +946,7 @@
                 curl -s $NEXUS_RELEASE_PREFIX/$image/tags/list | jq -r '.tags[]' > $TAGS_FILE 2> /dev/null
                 grep -q "^$tag\$" $TAGS_FILE
                 if [ $? -ne 0 ]; then
-                  echo "[ERROR] $image:$tag not released"
+                  echo "[ERROR] $line not released"
                   (( err++ ))
                 fi
               fi
