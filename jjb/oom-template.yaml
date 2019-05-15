@@ -925,15 +925,15 @@
 
             case $tag in
             *STAGING*)
-              echo "[ERROR] $line not released"
+              echo "[ERROR] $location: $image:$tag not released"
               (( err++ ))
               ;;
             *SNAPSHOT*)
-              echo "[ERROR] $line not released"
+              echo "[ERROR] $location: $image:$tag not released"
               (( err++ ))
               ;;
             *latest*)
-              echo "[ERROR] $line not released"
+              echo "[ERROR] $location: $image:$tag not released"
               (( err++ ))
               ;;
             *)
@@ -946,7 +946,7 @@
                 curl -s $NEXUS_RELEASE_PREFIX/$image/tags/list | jq -r '.tags[]' > $TAGS_FILE 2> /dev/null
                 grep -q "^$tag\$" $TAGS_FILE
                 if [ $? -ne 0 ]; then
-                  echo "[ERROR] $line not released"
+                  echo "[ERROR] $location: $image:$tag not released"
                   (( err++ ))
                 fi
               fi
