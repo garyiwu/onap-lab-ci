@@ -141,7 +141,7 @@
     disabled_var:
     triggers_var:
     name: '{env}-staging-{frequency}'
-    description: 'RKE OOM Staging deployment to {lab-name} {tenant-name}'
+    description: 'Staging deployment to {lab-name} {tenant-name}'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
@@ -174,7 +174,7 @@
     disabled_var:
     triggers_var:
     name: '{env}-release-{frequency}'
-    description: 'RKE OOM Staging deployment to {lab-name} {tenant-name}'
+    description: 'Release deployment to {lab-name} {tenant-name}'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
