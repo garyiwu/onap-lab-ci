@@ -1,7 +1,7 @@
 - project:
-    name: rke-staging
+    name: staging
     jobs:
-     - '{env}-rke-staging-{frequency}'
+     - '{env}-staging-{frequency}'
     branch: 'master'
     env:
      - 'windriver':
@@ -12,9 +12,15 @@
          disabled_var: false
          triggers_var:
           - timed: 'H 4 * * *'
+     - 'windriver-sb00':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-00'
+         stack-name: 'sb00'
+         frequency: 'manual'
+         disabled_var: false
 
 - project:
-    name: rke-release
+    name: release
     jobs:
      - '{env}-release-{frequency}'
     branch: 'master'

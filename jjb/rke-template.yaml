@@ -140,7 +140,7 @@
 - job-template:
     disabled_var:
     triggers_var:
-    name: '{env}-rke-staging-{frequency}'
+    name: '{env}-staging-{frequency}'
     description: 'RKE OOM Staging deployment to {lab-name} {tenant-name}'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
