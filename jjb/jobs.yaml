@@ -18,6 +18,18 @@
          stack-name: 'sb00'
          frequency: 'manual'
          disabled_var: false
+     - 'windriver-sb01':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-01'
+         stack-name: 'sb01'
+         frequency: 'manual'
+         disabled_var: false
+     - 'windriver-sb02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+         stack-name: 'sb02'
+         frequency: 'manual'
+         disabled_var: false
 
 - project:
     name: release
@@ -43,6 +55,12 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
          stack-name: 'sb01'
+         frequency: 'manual'
+         disabled_var: false
+     - 'windriver-sb02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+         stack-name: 'sb02'
          frequency: 'manual'
          disabled_var: false
 
