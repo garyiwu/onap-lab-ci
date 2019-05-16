@@ -60,9 +60,10 @@
           mkdir -p $WORKSPACE/archives/healthcheck
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/healthcheck
 
+          # record states of pods and containers
           ssh -i $SSH_KEY root@$RANCHER_IP 'kubectl get pods -n onap'
           ssh -i $SSH_KEY root@$RANCHER_IP "kubectl get pods -n onap -o json" > $WORKSPACE/archives/onap-pods.json
-
+          ssh -i $SSH_KEY root@$RANCHER_IP "/root/integration/deployment/heat/onap-rke/scripts/get-image-tags.sh | tee image-tags.log" > $WORKSPACE/archives/image-tags.log
 
           # demo init
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/demo-k8s.sh onap init"'
