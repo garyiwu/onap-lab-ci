@@ -914,7 +914,7 @@
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r HEAD)
           fi
           IMAGES_FILE=$WORKSPACE/archives/images.txt
-          rgrep -n -E ':\s*onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | sort > $IMAGES_FILE
+          rgrep --exclude-dir=pnda -n -E ':\s*onap/.*:.*' $CHANGED_FILES | awk '{{$1=$1}};1' | sort > $IMAGES_FILE
 
           set +x
           while read line; do
