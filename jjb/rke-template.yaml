@@ -108,9 +108,6 @@
           mkdir -p $WORKSPACE/archives/instantiateDemoVFWCL
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/instantiateDemoVFWCL
 
-          # wait for policy to kick in
-          sleep 10s
-
           # demo vfwclosedloop
           PKG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vPKG | head -1)
           PUBLIC_NET_ID=$(openstack stack show $STACK_NAME -f json | jq -r '.parameters.public_net_id')
