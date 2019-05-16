@@ -108,11 +108,8 @@
           mkdir -p $WORKSPACE/archives/instantiateDemoVFWCL
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/instantiateDemoVFWCL
 
-          # restart drools
-          echo "kubectl delete pod dev-policy-drools-0 -n onap" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-
           # wait for policy to kick in
-          sleep 20m
+          sleep 10s
 
           # demo vfwclosedloop
           PKG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vPKG | head -1)
