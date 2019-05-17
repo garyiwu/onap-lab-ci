@@ -9,7 +9,7 @@
          tenant-name: 'Integration-OOM-Staging-Daily'
          stack-name: 'staging'
          frequency: 'daily'
-         disabled_var: false
+         disabled_var: true
          triggers_var:
           - timed: 'H 4 * * *'
      - 'windriver-sb00':
