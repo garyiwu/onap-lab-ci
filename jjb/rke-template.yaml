@@ -97,10 +97,6 @@
           mkdir -p $WORKSPACE/archives/portal
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/portal
 
-          # push sample vFWCL policies
-          PAP_POD=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl --namespace onap get pods"' | grep policy-pap | sed 's/ .*//')
-          echo "kubectl exec -it $PAP_POD -n onap -c pap -- bash -c 'export PRELOAD_POLICIES=true; /tmp/policy-install/config/push-policies.sh'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-
           # ete instantiateDemoVFWCL
           ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap instantiateDemoVFWCL"'
           LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep instantiateDemoVFWCL | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
@@ -110,7 +106,7 @@
           rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/instantiateDemoVFWCL
 
           # demo vfwclosedloop
-          PKG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vPKG | head -1)
+          PKG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vFWCLvPKG | head -1)
           PUBLIC_NET_ID=$(openstack stack show $STACK_NAME -f json | jq -r '.parameters.public_net_id')
           PUBLIC_NET_NAME=$(openstack network show $PUBLIC_NET_ID -f value -c name)
           PKG_IP=$(openstack stack resource show $PKG_STACK vpg_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
@@ -124,11 +120,6 @@
 
           cd $WORKSPACE/archives
           rebot -N "ONAP CI" --removekeywords wuks --output output.xml --merge $(ls -rt */output.xml)
-
-          # temporary workaround to delete tlab-oom-daily after deployment
-          if [[ "{lab-name}" == "tlab" && "{tenant-name}" == "ETE-HEAT-Test" ]]; then
-            $WORKSPACE/test/ete/scripts/teardown-onap.sh -q
-          fi
 
           exit 0
 
