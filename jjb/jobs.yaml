@@ -30,6 +30,12 @@
          stack-name: 'sb02'
          frequency: 'manual'
          disabled_var: false
+     - 'windriver-sb04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
+         stack-name: 'sb04'
+         frequency: 'manual'
+         disabled_var: false
 
 - project:
     name: release
