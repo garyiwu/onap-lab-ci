@@ -109,7 +109,7 @@
           PKG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vFWCLvPKG | head -1)
           PUBLIC_NET_ID=$(openstack stack show $STACK_NAME -f json | jq -r '.parameters.public_net_id')
           PUBLIC_NET_NAME=$(openstack network show $PUBLIC_NET_ID -f value -c name)
-          PKG_IP=$(openstack stack resource show $PKG_STACK vpg_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
+          PKG_IP=$(openstack stack resource show $PKG_STACK vpg_server_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
           echo "/root/oom/kubernetes/robot/demo-k8s.sh onap vfwclosedloop $PKG_IP" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
           LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep vfwclosedloop | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
           echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
