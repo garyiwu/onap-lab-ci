@@ -48,7 +48,7 @@
          tenant-name: 'Integration-OOM-Daily'
          stack-name: 'release'
          frequency: 'daily'
-         disabled_var: false
+         disabled_var: true
          triggers_var:
           - timed: 'H 6 * * *'
      - 'windriver-sb00':
