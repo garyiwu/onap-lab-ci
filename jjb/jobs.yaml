@@ -70,12 +70,6 @@
          frequency: 'manual'
          disabled_var: false
 
-- project:
-    name: oom-verify
-    jobs:
-     - 'oom-verify'
-    branch: 'master'
-
 #- project:
 #    name: oom-stability
 #    jobs:
@@ -101,13 +95,3 @@
 #         tenant-name: 'Integration-SB-02'
 #         stack-name: 'sb02'
 #         disabled_var: true
-
-#- project:
-#    name: oom-verify
-#    jobs:
-#     - '{env}-oom-verify'
-#    env:
-#     - 'windriver':
-#         lab-name: 'windriver'
-#         tenant-name: 'Integration-OOM-Verify'
-#         branch: 'casablanca'
