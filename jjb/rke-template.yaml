@@ -188,3 +188,52 @@
       - archive-logs
       - trigger-lf-lab-job:
           lab-name: '{lab-name}'
+
+
+---
+- builder:
+    name: run-cleanup
+    builders:
+      - shell: |
+          #!/bin/bash
+          set +x
+          . $WORKSPACE/deployment/heat/onap-rke/env/{lab-name}/{tenant-name}-openrc
+          . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
+
+          set -x
+          rm -rf $WORKSPACE/archives
+          mkdir -p $WORKSPACE/archives
+
+          SSH_KEY=~/.ssh/onap_key
+
+          openstack project list -f value | while read line; do
+            OS_PROJECT_ID=$(echo $line | cut -d' ' -f1)
+            OS_PROJECT_NAME=$(echo $line | cut -d' ' -f2-)
+
+            openstack stack list -f value -c 'Stack Name' | while read STACK_NAME; do
+              RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
+              ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl top pod | sort --reverse --key 3 --numeric | head -10"'
+            done
+          done
+
+          exit 0
+
+- job-template:
+    disabled_var:
+    triggers_var:
+    name: '{env}-cleanup'
+    description: 'Clean up {lab-name} tenants'
+    disabled: '{obj:disabled_var}'
+    project-type: freestyle
+    lab-name: ''
+    tenant-name: ''
+    scm:
+      - git-integration:
+          branch: "{branch}"
+    wrappers:
+      - timestamps
+    builders:
+      - run-cleanup:
+          lab-name: '{lab-name}'
+    publishers:
+      - archive-logs

@@ -70,6 +70,17 @@
          frequency: 'manual'
          disabled_var: false
 
+- project:
+    name: cleanup
+    jobs:
+     - '{env}-cleanup'
+    branch: 'master'
+    env:
+     - 'windriver':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-OOM-Daily'
+         disabled_var: false
+
 #- project:
 #    name: oom-stability
 #    jobs:
