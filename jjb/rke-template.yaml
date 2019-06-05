@@ -189,8 +189,6 @@
       - trigger-lf-lab-job:
           lab-name: '{lab-name}'
 
-
----
 - builder:
     name: run-cleanup
     builders:
@@ -219,11 +217,8 @@
           exit 0
 
 - job-template:
-    disabled_var:
-    triggers_var:
     name: '{env}-cleanup'
     description: 'Clean up {lab-name} tenants'
-    disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
     tenant-name: ''
@@ -235,5 +230,6 @@
     builders:
       - run-cleanup:
           lab-name: '{lab-name}'
+          tenant-name: '{tenant-name}'
     publishers:
       - archive-logs
