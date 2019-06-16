@@ -81,28 +81,18 @@
          tenant-name: 'Integration-OOM-Daily'
          disabled_var: false
 
-#- project:
-#    name: oom-stability
-#    jobs:
-#     - '{env}-oom-stability72hr'
-#     - '{env}-oom-vfwclosedloop'
+- project:
+    name: oom-stability
+    jobs:
+     - '{env}-oom-stability72hr'
+     - '{env}-oom-vfwclosedloop'
 #     - '{env}-oom-resilience-healthdist'
 #     - '{env}-oom-resilience-instantiateDemoVFWCL'
 #     - '{env}-oom-resilience-vfwclosedloop'
-#    branch: 'casablanca'
-#    env:
-#     - 'windriver-sb00':
-#         lab-name: 'windriver'
-#         tenant-name: 'Integration-SB-00'
-#         stack-name: 'sb00'
-#         disabled_var: true
-#     - 'windriver-sb01':
-#         lab-name: 'windriver'
-#         tenant-name: 'Integration-SB-01'
-#         stack-name: 'sb01'
-#         disabled_var: true
-#     - 'windriver-sb02':
-#         lab-name: 'windriver'
-#         tenant-name: 'Integration-SB-02'
-#         stack-name: 'sb02'
-#         disabled_var: true
+    branch: 'master'
+    env:
+     - 'windriver-sb02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+         stack-name: 'sb02'
+         disabled_var: true
