@@ -1,7 +1,7 @@
 ---
 
 - job-template:
-    name: '{env}-oom-resilience-healthdist'
+    name: '{env}-resilience-healthdist'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
@@ -18,8 +18,8 @@
     properties:
       - build-blocker:
           blocking-jobs:
-            - "{env}-oom-deploy"
-            - "{env}-oom-healthcheck"
+            - "{env}-deploy"
+            - "{env}-healthcheck"
     builders:
       - shell: |
           #!/bin/bash
@@ -72,7 +72,7 @@
       - archive-logs
 
 - job-template:
-    name: '{env}-oom-resilience-instantiateDemoVFWCL'
+    name: '{env}-resilience-instantiateDemoVFWCL'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
@@ -89,8 +89,8 @@
     properties:
       - build-blocker:
           blocking-jobs:
-            - "{env}-oom-deploy"
-            - "{env}-oom-healthcheck"
+            - "{env}-deploy"
+            - "{env}-healthcheck"
     builders:
       - shell: |
           #!/bin/bash
@@ -149,7 +149,7 @@
       - archive-logs
 
 - job-template:
-    name: '{env}-oom-resilience-vfwclosedloop'
+    name: '{env}-resilience-vfwclosedloop'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
@@ -166,8 +166,8 @@
     properties:
       - build-blocker:
           blocking-jobs:
-            - "{env}-oom-deploy"
-            - "{env}-oom-healthcheck"
+            - "{env}-deploy"
+            - "{env}-healthcheck"
     builders:
       - shell: |
           #!/bin/bash
@@ -233,7 +233,7 @@
 
 - job-template:
     disabled_var:
-    name: '{env}-oom-stability72hr'
+    name: '{env}-stability72hr'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
@@ -248,11 +248,11 @@
     properties:
       - build-blocker:
           blocking-jobs:
-            - "{env}-oom-deploy"
-            - "{env}-oom-healthcheck"
-            - "{env}-oom-instantiate"
-            - "{env}-oom-manual"
-            - "{env}-oom-staging-manual"
+            - "{env}-deploy"
+            - "{env}-healthcheck"
+            - "{env}-instantiate"
+            - "{env}-manual"
+            - "{env}-staging-manual"
     builders:
       - shell: |
           #!/bin/bash
@@ -302,7 +302,7 @@
 
 - job-template:
     disabled_var:
-    name: '{env}-oom-vfwclosedloop'
+    name: '{env}-vfwclosedloop'
     disabled: '{obj:disabled_var}'
     project-type: freestyle
     lab-name: ''
@@ -317,11 +317,11 @@
     properties:
       - build-blocker:
           blocking-jobs:
-            - "{env}-oom-deploy"
-            - "{env}-oom-healthcheck"
-            - "{env}-oom-instantiate"
-            - "{env}-oom-manual"
-            - "{env}-oom-staging-manual"
+            - "{env}-deploy"
+            - "{env}-healthcheck"
+            - "{env}-instantiate"
+            - "{env}-manual"
+            - "{env}-staging-manual"
     builders:
       - shell: |
           #!/bin/bash

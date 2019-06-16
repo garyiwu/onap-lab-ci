@@ -82,17 +82,17 @@
          disabled_var: false
 
 - project:
-    name: oom-stability
+    name: stability
     jobs:
-     - '{env}-oom-stability72hr'
-     - '{env}-oom-vfwclosedloop'
-#     - '{env}-oom-resilience-healthdist'
-#     - '{env}-oom-resilience-instantiateDemoVFWCL'
-#     - '{env}-oom-resilience-vfwclosedloop'
+     - '{env}-stability72hr'
+     - '{env}-vfwclosedloop'
+#     - '{env}-resilience-healthdist'
+#     - '{env}-resilience-instantiateDemoVFWCL'
+#     - '{env}-resilience-vfwclosedloop'
     branch: 'master'
     env:
      - 'windriver-sb02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
          stack-name: 'sb02'
-         disabled_var: true
+         disabled_var: false
