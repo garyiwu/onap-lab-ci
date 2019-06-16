@@ -201,10 +201,10 @@
             fi
           done
 
-          PKG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vPKG | head -1)
+          PKG_STACK=$(openstack stack list -f value -c "Stack Name" --sort creation_time:desc | grep Vfmodule_Demo_vFWCLvPKG | head -1)
           PUBLIC_NET_ID=$(openstack stack show $STACK_NAME -f json | jq -r '.parameters.public_net_id')
           PUBLIC_NET_NAME=$(openstack network show $PUBLIC_NET_ID -f value -c name)
-          PKG_IP=$(openstack stack resource show $PKG_STACK vpg_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
+          PKG_IP=$(openstack stack resource show $PKG_STACK vpg_server_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
 
           for n in $(seq 1 10); do
             echo "Wait for vfwclosedloop count $n of 10"
