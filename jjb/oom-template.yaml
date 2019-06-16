@@ -24,7 +24,7 @@
       - shell: |
           #!/bin/bash
           set +x
-          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
+          . $WORKSPACE/deployment/heat/onap-rke/env/{lab-name}/{tenant-name}-openrc
           . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
           source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
 
@@ -95,7 +95,7 @@
       - shell: |
           #!/bin/bash
           set +x
-          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
+          . $WORKSPACE/deployment/heat/onap-rke/env/{lab-name}/{tenant-name}-openrc
           . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
           source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
 
@@ -172,7 +172,7 @@
       - shell: |
           #!/bin/bash
           set +x
-          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
+          . $WORKSPACE/deployment/heat/onap-rke/env/{lab-name}/{tenant-name}-openrc
           . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
           source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
 
@@ -257,7 +257,7 @@
       - shell: |
           #!/bin/bash
           set +x
-          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
+          . $WORKSPACE/deployment/heat/onap-rke/env/{lab-name}/{tenant-name}-openrc
           . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
           source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
 
@@ -326,7 +326,7 @@
       - shell: |
           #!/bin/bash
           set +x
-          . $WORKSPACE/deployment/heat/onap-oom/env/{lab-name}/{tenant-name}-openrc
+          . $WORKSPACE/deployment/heat/onap-rke/env/{lab-name}/{tenant-name}-openrc
           . $JENKINS_HOME/onap-lab-ci/labs/{lab-name}-openrc
           source $WORKSPACE/test/ete/scripts/install_openstack_cli.sh
 
