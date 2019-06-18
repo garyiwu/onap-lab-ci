@@ -18,18 +18,6 @@
          stack-name: 'sb00'
          frequency: 'manual'
          disabled_var: false
-     - 'windriver-sb01':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-01'
-         stack-name: 'sb01'
-         frequency: 'manual'
-         disabled_var: false
-     - 'windriver-sb02':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
-         stack-name: 'sb02'
-         frequency: 'manual'
-         disabled_var: false
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
@@ -91,8 +79,13 @@
 #     - '{env}-resilience-vfwclosedloop'
     branch: 'master'
     env:
+     - 'windriver-sb01':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-01'
+         stack-name: 'sb01'
+         disabled_var: true
      - 'windriver-sb02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
          stack-name: 'sb02'
-         disabled_var: false
+         disabled_var: true
