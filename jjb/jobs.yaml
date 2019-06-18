@@ -83,7 +83,7 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
          stack-name: 'sb01'
-         disabled_var: true
+         disabled_var: false
      - 'windriver-sb02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
