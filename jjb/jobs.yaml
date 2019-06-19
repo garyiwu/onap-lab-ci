@@ -74,9 +74,6 @@
     jobs:
      - '{env}-stability72hr'
      - '{env}-vfwclosedloop'
-#     - '{env}-resilience-healthdist'
-#     - '{env}-resilience-instantiateDemoVFWCL'
-#     - '{env}-resilience-vfwclosedloop'
     branch: 'master'
     env:
      - 'windriver-sb01':
@@ -84,8 +81,17 @@
          tenant-name: 'Integration-SB-01'
          stack-name: 'sb01'
          disabled_var: false
+
+- project:
+    name: resilience
+    jobs:
+     - '{env}-resilience-healthdist'
+     - '{env}-resilience-instantiateDemoVFWCL'
+     - '{env}-resilience-vfwclosedloop'
+    branch: 'master'
+    env:
      - 'windriver-sb02':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
          stack-name: 'sb02'
-         disabled_var: true
+         disabled_var: false
