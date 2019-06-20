@@ -1,4 +1,4 @@
-dep-dcae-dashboard-5c9ddbd7d5-g58pp
+dep-dcae-dashboard-5c9ddbd7d5-bwbhk
 dep-dcae-hv-ves-collector-7f8bcddc4b-mnzv2
 dep-dcae-prh-5695c8b78c-rnfx5
 dep-dcae-snmptrap-collector-96d5858f6-tnk27
