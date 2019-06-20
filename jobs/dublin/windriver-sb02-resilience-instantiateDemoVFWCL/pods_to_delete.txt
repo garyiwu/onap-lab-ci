@@ -26,6 +26,17 @@ dev-multicloud-multicloud-pike-6b899d5d-zddct
 dev-multicloud-multicloud-starlingx-779f94d5cf-tcj2t
 dev-multicloud-multicloud-vio-76db6c7fbf-nm6x2
 dev-multicloud-multicloud-windriver-5cd7574896-g55t8
+dev-policy-brmsgw-6d4f9c6567-xgfjq
+dev-policy-drools-0
+dev-policy-nexus-6f6fcb6675-dkg6x
+dev-policy-pap-654966b459-td565
+dev-policy-pdp-0
+dev-policy-policy-apex-pdp-0
+dev-policy-policy-api-8bbff857d-lm99r
+dev-policy-policy-distribution-8497d87554-zhqtd
+dev-policy-policy-pap-6d65cb4f99-7ww7k
+dev-policy-policy-xacml-pdp-65bbc9697f-z88c5
+dev-policy-policydb-7f56989bf-47vxc
 dev-sdc-sdc-be-56d8f658-q7rst
 dev-sdc-sdc-dcae-be-6dd4df6cf6-nhtxj
 dev-sdc-sdc-dcae-dt-6f669b4d4c-vsswr
