@@ -61,8 +61,7 @@
             exit 1
           fi
 
-          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
@@ -132,8 +131,7 @@
             exit 1
           fi
 
-          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
@@ -220,8 +218,7 @@
             exit 1
           fi
 
-          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
@@ -287,8 +284,7 @@
             exit 1
           fi
 
-          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
           echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
           echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
@@ -362,8 +358,7 @@
             exit 1
           fi
 
-          echo "kubectl cp -n onap $ROBOT_POD:share/logs/$LOG_DIR /tmp/robot/logs/$LOG_DIR" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/tmp/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
           echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
           echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
