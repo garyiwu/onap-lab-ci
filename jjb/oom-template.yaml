@@ -34,34 +34,34 @@
 
           SSH_KEY=~/.ssh/onap_key
           STACK_NAME="{stack-name}"
-          RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
+          NFS_IP=$(openstack stack output show $STACK_NAME nfs_vm_ip -c output_value -f value)
           K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
-          ssh-keygen -R $RANCHER_IP
+          ssh-keygen -R $NFS_IP
 
-          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
+          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$NFS_IP sudo su)
           if [ "$ROBOT_POD" == "" ]; then
             exit 1
           fi
 
-          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
-          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su)
+          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
           for n in $(seq 1 180); do
             sleep 30
-            RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2|3/3' | wc -l)
+            RESULT=$(ssh -i $SSH_KEY ubuntu@$NFS_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2|3/3' | wc -l)
             if [[ $? -eq 0 && $RESULT -eq 0 ]]; then
               break
             fi
           done
 
-          ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap healthdist"'
+          ssh -i $SSH_KEY ubuntu@$NFS_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap healthdist"'
           retval=$?
 
-          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep healthdist | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep healthdist | head -1" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su)
           if [ "$LOG_DIR" == "" ]; then
             exit 1
           fi
 
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$NFS_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
@@ -104,34 +104,34 @@
 
           SSH_KEY=~/.ssh/onap_key
           STACK_NAME="{stack-name}"
-          RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
+          NFS_IP=$(openstack stack output show $STACK_NAME nfs_vm_ip -c output_value -f value)
           K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
-          ssh-keygen -R $RANCHER_IP
+          ssh-keygen -R $NFS_IP
 
-          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
+          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$NFS_IP sudo su)
           if [ "$ROBOT_POD" == "" ]; then
             exit 1
           fi
 
-          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
-          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su)
+          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
           for n in $(seq 1 180); do
             sleep 30
-            RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2|3/3' | wc -l)
+            RESULT=$(ssh -i $SSH_KEY ubuntu@$NFS_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2|3/3' | wc -l)
             if [[ $? -eq 0 && $RESULT -eq 0 ]]; then
               break
             fi
           done
 
-          ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap instantiateDemoVFWCL"'
+          ssh -i $SSH_KEY ubuntu@$NFS_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap instantiateDemoVFWCL"'
           retval=$?
 
-          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep instantiateDemoVFWCL | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep instantiateDemoVFWCL | head -1" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su)
           if [ "$LOG_DIR" == "" ]; then
             exit 1
           fi
 
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$NFS_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
@@ -180,20 +180,20 @@
 
           SSH_KEY=~/.ssh/onap_key
           STACK_NAME="{stack-name}"
-          RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
+          NFS_IP=$(openstack stack output show $STACK_NAME nfs_vm_ip -c output_value -f value)
           K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
-          ssh-keygen -R $RANCHER_IP
+          ssh-keygen -R $NFS_IP
 
-          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
+          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$NFS_IP sudo su)
           if [ "$ROBOT_POD" == "" ]; then
             exit 1
           fi
 
-          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
-          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          POD_TO_KILL=$(echo "kubectl -n onap get pods | grep $POD_TO_DELETE | sed 's/ .*//' | head -1" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su)
+          echo "kubectl -n onap delete pod $POD_TO_KILL" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
           for n in $(seq 1 180); do
             sleep 30
-            RESULT=$(ssh -i $SSH_KEY ubuntu@$RANCHER_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2|3/3' | wc -l)
+            RESULT=$(ssh -i $SSH_KEY ubuntu@$NFS_IP 'sudo su -c "kubectl -n onap get pods"' | grep -vE 'NAME|Completed|Error|1/1|2/2|3/3' | wc -l)
             if [[ $? -eq 0 && $RESULT -eq 0 ]]; then
               break
             fi
@@ -206,19 +206,19 @@
 
           for n in $(seq 1 10); do
             echo "Wait for vfwclosedloop count $n of 10"
-            echo "/root/oom/kubernetes/robot/demo-k8s.sh onap vfwclosedloop $PKG_IP" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+            echo "/root/oom/kubernetes/robot/demo-k8s.sh onap vfwclosedloop $PKG_IP" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
             RESULT=$?
             if [[ $RESULT -eq 0 ]]; then
               break
             fi
           done
 
-          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep vfwclosedloop | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep vfwclosedloop | head -1" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su)
           if [ "$LOG_DIR" == "" ]; then
             exit 1
           fi
 
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$NFS_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
@@ -264,30 +264,30 @@
 
           SSH_KEY=~/.ssh/onap_key
           STACK_NAME="{stack-name}"
-          RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
+          NFS_IP=$(openstack stack output show $STACK_NAME nfs_vm_ip -c output_value -f value)
           K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
-          ssh-keygen -R $RANCHER_IP
+          ssh-keygen -R $NFS_IP
 
-          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
+          echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
 
-          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
+          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$NFS_IP sudo su)
           if [ "$ROBOT_POD" == "" ]; then
             exit 1
           fi
 
-          ssh -i $SSH_KEY ubuntu@$RANCHER_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap stability72hr"'
+          ssh -i $SSH_KEY ubuntu@$NFS_IP  'sudo su -l root -c "/root/oom/kubernetes/robot/ete-k8s.sh onap stability72hr"'
           retval=$?
 
-          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep stability72hr | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep stability72hr | head -1" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su)
           if [ "$LOG_DIR" == "" ]; then
             exit 1
           fi
 
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$NFS_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
-          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
+          echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
 
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
@@ -332,14 +332,14 @@
 
           SSH_KEY=~/.ssh/onap_key
           STACK_NAME="{stack-name}"
-          RANCHER_IP=$(openstack stack output show $STACK_NAME rancher_vm_ip -c output_value -f value)
+          NFS_IP=$(openstack stack output show $STACK_NAME nfs_vm_ip -c output_value -f value)
           K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
-          ssh-keygen -R $RANCHER_IP
+          ssh-keygen -R $NFS_IP
 
-          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
+          echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
 
-          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$RANCHER_IP sudo su)
+          ROBOT_POD=$(echo "kubectl -n onap get pods | grep robot | sed 's/ .*//'" | ssh -i $SSH_KEY -o StrictHostKeychecking=no ubuntu@$NFS_IP sudo su)
           if [ "$ROBOT_POD" == "" ]; then
             exit 1
           fi
@@ -350,18 +350,18 @@
           PKG_IP=$(openstack stack resource show $PKG_STACK vpg_server_0 -f json | jq -r ".attributes.addresses.$PUBLIC_NET_NAME[0].addr")
 
 
-          echo "/root/oom/kubernetes/robot/demo-k8s.sh onap vfwclosedloop $PKG_IP" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "/root/oom/kubernetes/robot/demo-k8s.sh onap vfwclosedloop $PKG_IP" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
           retval=$?
 
-          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep vfwclosedloop | head -1" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su)
+          LOG_DIR=$(echo "kubectl exec -n onap $ROBOT_POD -- ls -1t /share/logs | grep vfwclosedloop | head -1" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su)
           if [ "$LOG_DIR" == "" ]; then
             exit 1
           fi
 
-          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$RANCHER_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
+          rsync -e "ssh -i $SSH_KEY" -avtz ubuntu@$NFS_IP:/dockerdata-nfs/dev-robot/robot/logs/$LOG_DIR/ $WORKSPACE/archives/
 
-          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
-          echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$RANCHER_IP sudo su
+          echo "kubectl top nodes" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
+          echo "kubectl get pods -n onap | grep -vE 'Completed|Error|1/1|2/2|3/3'" | ssh -i $SSH_KEY ubuntu@$NFS_IP sudo su
 
           echo "Browse Robot results at http://$K8S_IP:30209/logs/$LOG_DIR/"
 
