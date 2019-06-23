@@ -36,7 +36,7 @@
          tenant-name: 'Integration-Release-Daily'
          stack-name: 'release'
          frequency: 'daily'
-         disabled_var: true
+         disabled_var: false
          triggers_var:
           - timed: 'H 6 * * *'
      - 'windriver-sb00':
