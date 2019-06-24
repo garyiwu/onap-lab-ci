@@ -80,7 +80,7 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-01'
          stack-name: 'sb01'
-         disabled_var: false
+         disabled_var: true
 
 - project:
     name: resilience
@@ -94,4 +94,4 @@
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-02'
          stack-name: 'sb02'
-         disabled_var: false
+         disabled_var: true
