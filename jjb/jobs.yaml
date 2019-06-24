@@ -39,6 +39,12 @@
          disabled_var: false
          triggers_var:
           - timed: 'H 6 * * *'
+     - 'windriver-longevity':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-Longevity'
+         stack-name: 'long'
+         frequency: 'manual'
+         disabled_var: false
      - 'windriver-sb00':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-00'
