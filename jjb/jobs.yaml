@@ -87,6 +87,11 @@
          tenant-name: 'Integration-SB-01'
          stack-name: 'sb01'
          disabled_var: true
+     - 'windriver-longevity':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-Longevity'
+         stack-name: 'long'
+         disabled_var: false
 
 - project:
     name: resilience
