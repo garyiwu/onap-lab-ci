@@ -2,7 +2,8 @@
     name: staging
     jobs:
      - '{env}-staging-{frequency}'
-    branch: 'master'
+    integration-branch: 'master'
+    oom-branch: 'staging'
     env:
      - 'windriver':
          lab-name: 'windriver'
@@ -29,7 +30,8 @@
     name: release
     jobs:
      - '{env}-release-{frequency}'
-    branch: 'master'
+    integration-branch: 'master'
+    oom-branch: 'staging'
     env:
      - 'windriver':
          lab-name: 'windriver'
@@ -68,7 +70,7 @@
     name: cleanup
     jobs:
      - '{env}-cleanup'
-    branch: 'master'
+    integration-branch: 'master'
     env:
      - 'windriver':
          lab-name: 'windriver'
@@ -80,7 +82,7 @@
     jobs:
      - '{env}-stability72hr'
      - '{env}-vfwclosedloop'
-    branch: 'master'
+    integration-branch: 'master'
     env:
      - 'windriver-sb01':
          lab-name: 'windriver'
@@ -99,7 +101,7 @@
      - '{env}-resilience-healthdist'
      - '{env}-resilience-instantiateDemoVFWCL'
      - '{env}-resilience-vfwclosedloop'
-    branch: 'master'
+    integration-branch: 'master'
     env:
      - 'windriver-sb02':
          lab-name: 'windriver'

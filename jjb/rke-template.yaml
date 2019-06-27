@@ -18,7 +18,7 @@
           STACK_NAME={stack-name}
 
           cd $WORKSPACE/deployment/heat/onap-rke/
-          ./scripts/deploy.sh -s $STACK_NAME {docker_manifest_option} -d {stack-name}.{lab-name}.onapci.org -q $ENV_FILE
+          ./scripts/deploy.sh -s $STACK_NAME {docker_manifest_option} -d {stack-name}.{lab-name}.onapci.org -i {integration-branch} -o {oom-branch} -q $ENV_FILE
 
           NFS_IP=$(openstack stack output show $STACK_NAME nfs_vm_ip -c output_value -f value)
           K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
@@ -130,7 +130,7 @@
     tenant-name: ''
     scm:
       - git-integration:
-          branch: "{branch}"
+          branch: "{integration-branch}"
     wrappers:
       - timestamps
       - timeout:
@@ -143,8 +143,8 @@
           lab-name: '{lab-name}'
           tenant-name: '{tenant-name}'
           docker_manifest_option: '-m docker-manifest-staging.csv'
-          gerrit_branch: '{branch}'
-          gerrit_refspec: 'refs/heads/{branch}'
+          integration-branch: '{integration-branch}'
+          oom-branch: '{oom-branch}'
     publishers:
       - integration-robot
       - pods-influxdb
@@ -163,7 +163,7 @@
     tenant-name: ''
     scm:
       - git-integration:
-          branch: "{branch}"
+          branch: "{integration-branch}"
     wrappers:
       - timestamps
       - timeout:
@@ -176,8 +176,8 @@
           lab-name: '{lab-name}'
           tenant-name: '{tenant-name}'
           docker_manifest_option: ''
-          gerrit_branch: '{branch}'
-          gerrit_refspec: 'refs/heads/{branch}'
+          integration-branch: '{integration-branch}'
+          oom-branch: '{oom-branch}'
     publishers:
       - integration-robot
       - pods-influxdb
@@ -224,7 +224,7 @@
     tenant-name: ''
     scm:
       - git-integration:
-          branch: "{branch}"
+          branch: "{integration-branch}"
     wrappers:
       - timestamps
     builders:
