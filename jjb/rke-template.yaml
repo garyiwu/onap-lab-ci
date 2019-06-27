@@ -18,7 +18,7 @@
           STACK_NAME={stack-name}
 
           cd $WORKSPACE/deployment/heat/onap-rke/
-          ./scripts/deploy.sh -s $STACK_NAME {docker_manifest_option} -d {stack-name}.{lab-name}.onapci.org -i {integration-branch} -o {oom-branch} -q $ENV_FILE
+          ./scripts/deploy.sh -s $STACK_NAME -d {stack-name}.{lab-name}.onapci.org -i {integration-branch} -o {oom-branch} -q $ENV_FILE
 
           NFS_IP=$(openstack stack output show $STACK_NAME nfs_vm_ip -c output_value -f value)
           K8S_IP=$(openstack stack output show $STACK_NAME k8s_01_vm_ip -c output_value -f value)
@@ -142,7 +142,6 @@
           stack-name: '{stack-name}'
           lab-name: '{lab-name}'
           tenant-name: '{tenant-name}'
-          docker_manifest_option: '-m docker-manifest-staging.csv'
           integration-branch: '{integration-branch}'
           oom-branch: '{oom-branch}'
     publishers:
@@ -175,7 +174,6 @@
           stack-name: '{stack-name}'
           lab-name: '{lab-name}'
           tenant-name: '{tenant-name}'
-          docker_manifest_option: ''
           integration-branch: '{integration-branch}'
           oom-branch: '{oom-branch}'
     publishers:
