@@ -321,6 +321,12 @@
             openstack stack delete -y $DEMO_STACKS
           fi
 
+          # clean up vVG VNFs
+          VVG_SERVERS=$(openstack server list -f value -c Name  --sort creation_time:desc | grep vVG_)
+          if [ ! -z "$VVG_SERVERS" ]; then
+            openstack server delete $VVG_SERVERS
+          fi
+
           exit 0
     publishers:
       - integration-robot
