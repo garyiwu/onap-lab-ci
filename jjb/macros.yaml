@@ -95,14 +95,14 @@
     builders:
       - shell: |
           #!/bin/bash -x
-          $JENKINS_HOME/onap-lab-ci/scripts/process-robot.sh $WORKSPACE/archives/output.xml $JOB_NAME $BUILD_NUMBER
+          # $JENKINS_HOME/onap-lab-ci/scripts/process-robot.sh $WORKSPACE/archives/output.xml $JOB_NAME $BUILD_NUMBER
 
 - builder:
     name: pods-influxdb
     builders:
       - shell: |
           #!/bin/bash -x
-          $JENKINS_HOME/onap-lab-ci/scripts/process-pods.sh $WORKSPACE/archives/onap-pods.json $JOB_NAME $BUILD_NUMBER
+          # $JENKINS_HOME/onap-lab-ci/scripts/process-pods.sh $WORKSPACE/archives/onap-pods.json $JOB_NAME $BUILD_NUMBER
 
 - publisher:
     name: trigger-lf-lab-job
