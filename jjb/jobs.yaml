@@ -19,6 +19,24 @@
          stack-name: 'sb00'
          frequency: 'manual'
          disabled_var: false
+     - 'windriver-sb01':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-01'
+         stack-name: 'sb01'
+         frequency: 'manual'
+         disabled_var: false
+     - 'windriver-sb02':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-02'
+         stack-name: 'sb02'
+         frequency: 'manual'
+         disabled_var: false
+     - 'windriver-sb03':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-03'
+         stack-name: 'sb03'
+         frequency: 'manual'
+         disabled_var: false
      - 'windriver-sb04':
          lab-name: 'windriver'
          tenant-name: 'Integration-SB-04'
@@ -65,16 +83,17 @@
          stack-name: 'sb02'
          frequency: 'manual'
          disabled_var: false
-
-- project:
-    name: cleanup
-    jobs:
-     - '{env}-cleanup'
-    integration-branch: 'master'
-    env:
-     - 'windriver':
+     - 'windriver-sb03':
          lab-name: 'windriver'
-         tenant-name: 'Integration-Release-Daily'
+         tenant-name: 'Integration-SB-03'
+         stack-name: 'sb03'
+         frequency: 'manual'
+         disabled_var: false
+     - 'windriver-sb04':
+         lab-name: 'windriver'
+         tenant-name: 'Integration-SB-04'
+         stack-name: 'sb04'
+         frequency: 'manual'
          disabled_var: false
 
 - project:
@@ -84,27 +103,8 @@
      - '{env}-vfwclosedloop'
     integration-branch: 'master'
     env:
-     - 'windriver-sb01':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-01'
-         stack-name: 'sb01'
-         disabled_var: true
      - 'windriver-longevity':
          lab-name: 'windriver'
          tenant-name: 'Integration-Longevity'
          stack-name: 'long'
          disabled_var: false
-
-- project:
-    name: resilience
-    jobs:
-     - '{env}-resilience-healthdist'
-     - '{env}-resilience-instantiateDemoVFWCL'
-     - '{env}-resilience-vfwclosedloop'
-    integration-branch: 'master'
-    env:
-     - 'windriver-sb02':
-         lab-name: 'windriver'
-         tenant-name: 'Integration-SB-02'
-         stack-name: 'sb02'
-         disabled_var: true
